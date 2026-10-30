@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La valorisation d'entreprise</title>
+<style>
+:root{
+  --navy:#081521; --bronze:#7C6948; --bronze-l:#9B8866; --cream:#FBF8F2; --ink:#1d2430;
+  --muted:#5d6672; --line:#e3ddd2; --card:#ffffff; --ok:#2f6b4f; --ko:#9b3b2e; --tint:#f3efe7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header.top{background:#fff;border-bottom:3px solid var(--bronze);position:sticky;top:0;z-index:20}
+.top-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.top-in img{height:34px;width:auto}
+.top-in .tag{font-size:13px;color:var(--muted);text-align:right}
+.progress{height:4px;background:var(--line)}
+.progress span{display:block;height:100%;width:0;background:var(--bronze);transition:width .3s}
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:250px 1fr;gap:28px;padding:24px 16px 60px}
+.layout>*{min-width:0}
+nav.side{position:sticky;top:78px;align-self:start;font-size:14px}
+nav.side a{display:block;padding:7px 10px;border-left:3px solid transparent;color:var(--ink);text-decoration:none;border-radius:0 6px 6px 0}
+nav.side a:hover{background:var(--tint)}
+nav.side a.active{border-left-color:var(--bronze);background:#fff;font-weight:600}
+nav.side a .done{color:var(--ok);font-weight:700;margin-left:4px}
+main section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 30px;margin-bottom:26px}
+h1{font-family:Georgia,"Times New Roman",serif;color:var(--navy);font-size:34px;line-height:1.2;margin:0 0 10px}
+h2{font-family:Georgia,"Times New Roman",serif;color:var(--navy);font-size:26px;margin:0 0 6px}
+h3{color:var(--navy);font-size:18px;margin:26px 0 8px}
+.kicker{color:var(--bronze);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:12px;margin-bottom:6px}
+.lead{font-size:18px;color:#2c3440}
+.hero{background:var(--navy);color:#fff;border:none}
+.hero h1{color:#fff}
+.hero .lead{color:#e8e2d6}
+.hero .kicker{color:var(--bronze-l)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.pill{border:1px solid var(--bronze-l);color:#efe8dc;border-radius:20px;padding:4px 12px;font-size:13px}
+.box{border-radius:10px;padding:14px 16px;margin:16px 0}
+.box.key{background:var(--tint);border-left:4px solid var(--bronze)}
+.box.warn{background:#fbf1ec;border-left:4px solid var(--ko)}
+.box.fisc{background:#eef2f7;border-left:4px solid var(--navy)}
+.box.cab{background:#f4f6f1;border-left:4px solid var(--ok)}
+.box b.t{display:block;margin-bottom:4px;color:var(--navy)}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--tint);color:var(--navy);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{font-weight:700;border-top:2px solid var(--navy)}
+.scroll{overflow-x:auto}
+.cascade{display:grid;gap:6px;margin:14px 0}
+.cascade div{display:flex;justify-content:space-between;padding:8px 12px;border-radius:6px;background:var(--tint)}
+.cascade div.res{background:var(--navy);color:#fff;font-weight:700}
+.cascade div.minus{background:#fff;border:1px dashed var(--line)}
+.bridge{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:16px 0}
+.bridge .blk{flex:1 1 150px;border-radius:10px;padding:14px;text-align:center;font-weight:600}
+.bridge .op{align-self:center;font-size:26px;color:var(--bronze);font-weight:700}
+.b1{background:var(--navy);color:#fff}.b2{background:var(--bronze);color:#fff}.b3{background:#e9e3d7;color:var(--navy)}
+.quiz{border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:22px;background:#fffdf9}
+.quiz h4{margin:0 0 10px;color:var(--bronze);font-size:14px;text-transform:uppercase;letter-spacing:.05em}
+.q{margin-bottom:16px}
+.q p{margin:0 0 8px;font-weight:600}
+.q button.opt{display:block;width:100%;text-align:left;margin:5px 0;padding:9px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;font:inherit;cursor:pointer}
+.q button.opt:hover{border-color:var(--bronze)}
+.q button.opt.good{background:#e6f1ea;border-color:var(--ok)}
+.q button.opt.bad{background:#f7e6e2;border-color:var(--ko)}
+.q .fb{display:none;font-size:14px;margin-top:6px;padding:8px 10px;border-radius:6px;background:var(--tint)}
+.score{font-weight:700;color:var(--navy)}
+.sim{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.sim fieldset{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 12px}
+.sim legend{font-weight:700;color:var(--navy);padding:0 6px}
+.sim label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;margin:6px 0}
+.sim input[type=number]{width:120px;padding:6px 8px;border:1px solid #cfc7b8;border-radius:6px;font:inherit;text-align:right;background:#fffdf7}
+.sim input[type=checkbox]{transform:scale(1.2)}
+.out{background:var(--navy);color:#fff;border-radius:12px;padding:18px}
+.out .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.out .row.big{font-size:20px;font-weight:700;color:#fff;border-bottom:none;padding-top:12px}
+.out .row span:last-child{font-variant-numeric:tabular-nums}
+.out small{color:#cfc6b6}
+.sens{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.sens div{background:rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center;font-size:13px}
+.sens b{display:block;font-size:16px}
+.glo dt{font-weight:700;color:var(--navy);margin-top:12px}
+.glo dd{margin:2px 0 0 0;color:#2c3440}
+.check li{margin:6px 0}
+.small{font-size:13px;color:var(--muted)}
+.next{display:flex;justify-content:space-between;margin-top:22px}
+.next a{color:var(--bronze);font-weight:600;text-decoration:none}
+footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:var(--muted)}
+.mini{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--tint);border-radius:10px;padding:12px 14px;margin:14px 0}
+.mini input{width:90px;padding:5px 8px;border:1px solid #cfc7b8;border-radius:6px;font:inherit;text-align:right}
+.mini output{font-weight:700;color:var(--navy);font-size:18px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav.side{position:static;display:flex;overflow-x:auto;gap:4px;padding-bottom:6px}
+  nav.side a{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;border-radius:6px 6px 0 0}
+  nav.side a.active{border-bottom-color:var(--bronze)}
+  .sim{grid-template-columns:1fr}
+  main table{display:block;overflow-x:auto}
+  .sim label{flex-wrap:wrap}
+  main section{padding:20px 16px}
+  h1{font-size:27px}
+  .top-in .tag{display:none}
+}
+@media print{header.top,nav.side,.quiz,.next{display:none}.layout{display:block}main section{break-inside:avoid;border:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA9IAAACrCAYAAACKVqRKAAAACXBIWXMAAC4jAAAuIwF4pT92AAARFWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNi4wLWMwMDIgNzkuMTY0NDYwLCAyMDIwLzA1LzEyLTE2OjA0OjE3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczppbGx1c3RyYXRvcj0iaHR0cDovL25zLmFkb2JlLmNvbS9pbGx1c3RyYXRvci8xLjAvIiB4bWxuczp4bXBUUGc9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC90L3BnLyIgeG1sbnM6c3REaW09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9EaW1lbnNpb25zIyIgeG1sbnM6c3RGbnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9Gb250IyIgeG1sbnM6eG1wRz0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL2cvIiB4bWxuczpwZGY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGRmLzEuMy8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcDpNZXRhZGF0YURhdGU9IjIwMjAtMDYtMjRUMTM6NDY6NTArMDI6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIwLTA2LTI0VDEzOjQ2OjUwKzAyOjAwIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMC0wMy0wMlQxNjoxNzo0MyswMTowMCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBJbGx1c3RyYXRvciBDQyAyMy4wIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmZhMTkxMmI3LTBjMDYtYzM0NC05ODUxLWI1YzRjMmUyNThhOSIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmM4M2QyYzBjLTY2ZWItNzc0Mi1hOGM2LWMxYjk3YzhhZGQ2ZCIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjVEMjA4OTI0OTNCRkRCMTE5MTRBODU5MEQzMTUwOEM4IiB4bXBNTTpSZW5kaXRpb25DbGFzcz0icHJvb2Y6cGRmIiBpbGx1c3RyYXRvcjpTdGFydHVwUHJvZmlsZT0iUHJpbnQiIHhtcFRQZzpIYXNWaXNpYmxlT3ZlcnByaW50PSJGYWxzZSIgeG1wVFBnOkhhc1Zpc2libGVUcmFuc3BhcmVuY3k9IkZhbHNlIiB4bXBUUGc6TlBhZ2VzPSIxIiBwZGY6UHJvZHVjZXI9IkFkb2JlIFBERiBsaWJyYXJ5IDEwLjAxIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiPiA8ZGM6dGl0bGU+IDxyZGY6QWx0PiA8cmRmOmxpIHhtbDpsYW5nPSJ4LWRlZmF1bHQiPkltcHJlc3Npb248L3JkZjpsaT4gPC9yZGY6QWx0PiA8L2RjOnRpdGxlPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphZTQ3OGNkMy1iY2U4LTY5NDItODdhNS0yOWQwOTQ4ZDQ4MDMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YWU0NzhjZDMtYmNlOC02OTQyLTg3YTUtMjlkMDk0OGQ0ODAzIiBzdFJlZjpvcmlnaW5hbERvY3VtZW50SUQ9InV1aWQ6NUQyMDg5MjQ5M0JGREIxMTkxNEE4NTkwRDMxNTA4QzgiIHN0UmVmOnJlbmRpdGlvbkNsYXNzPSJwcm9vZjpwZGYiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YjE1ZDZiZTUtMGEzYy00ODI4LWFlY2YtNGU4NWVmMTU4YzI0IiBzdEV2dDp3aGVuPSIyMDIwLTAzLTAyVDE2OjE0OjQxKzAxOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBJbGx1c3RyYXRvciBDQyAyMy4wIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDpjNzJkMGI0Zi0wOGFjLTQ3OTQtYmM1Zi0xNzVlZGRkYTAwNDIiIHN0RXZ0OndoZW49IjIwMjAtMDMtMDJUMTY6MTc6NDMrMDE6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIElsbHVzdHJhdG9yIENDIDIzLjAgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNvbnZlcnRlZCIgc3RFdnQ6cGFyYW1ldGVycz0iZnJvbSBhcHBsaWNhdGlvbi9wZGYgdG8gYXBwbGljYXRpb24vdm5kLmFkb2JlLnBob3Rvc2hvcCIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YWU0NzhjZDMtYmNlOC02OTQyLTg3YTUtMjlkMDk0OGQ0ODAzIiBzdEV2dDp3aGVuPSIyMDIwLTA2LTI0VDEzOjQ2OjUwKzAyOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMiAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNvbnZlcnRlZCIgc3RFdnQ6cGFyYW1ldGVycz0iZnJvbSBhcHBsaWNhdGlvbi9wZGYgdG8gaW1hZ2UvcG5nIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJkZXJpdmVkIiBzdEV2dDpwYXJhbWV0ZXJzPSJjb252ZXJ0ZWQgZnJvbSBhcHBsaWNhdGlvbi92bmQuYWRvYmUucGhvdG9zaG9wIHRvIGltYWdlL3BuZyIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6ZmExOTEyYjctMGMwNi1jMzQ0LTk4NTEtYjVjNGMyZTI1OGE5IiBzdEV2dDp3aGVuPSIyMDIwLTA2LTI0VDEzOjQ2OjUwKzAyOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMiAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDx4bXBUUGc6TWF4UGFnZVNpemUgc3REaW06dz0iOTUuMzY3NTI0IiBzdERpbTpoPSIxOC41ODgwMjkiIHN0RGltOnVuaXQ9Ik1pbGxpbWV0ZXJzIi8+IDx4bXBUUGc6Rm9udHM+IDxyZGY6QmFnPiA8cmRmOmxpIHN0Rm50OmZvbnROYW1lPSJQaWxsR290aGljOTAwbWctQm9sZCIgc3RGbnQ6Zm9udEZhbWlseT0iUGlsbCBHb3RoaWMgOTAwbWciIHN0Rm50OmZvbnRGYWNlPSJCb2xkIiBzdEZudDpmb250VHlwZT0iT3BlbiBUeXBlIiBzdEZudDp2ZXJzaW9uU3RyaW5nPSJWZXJzaW9uIDEuMDAwIDIwMDcgaW5pdGlhbCByZWxlYXNlIiBzdEZudDpjb21wb3NpdGU9IkZhbHNlIiBzdEZudDpmb250RmlsZU5hbWU9Ii42NDIub3RmIi8+IDwvcmRmOkJhZz4gPC94bXBUUGc6Rm9udHM+IDx4bXBUUGc6UGxhdGVOYW1lcz4gPHJkZjpTZXE+IDxyZGY6bGk+UEFOVE9ORSAxMDM0OCBDPC9yZGY6bGk+IDxyZGY6bGk+UEFOVE9ORSAyOTYgQzwvcmRmOmxpPiA8L3JkZjpTZXE+IDwveG1wVFBnOlBsYXRlTmFtZXM+IDx4bXBUUGc6U3dhdGNoR3JvdXBzPiA8cmRmOlNlcT4gPHJkZjpsaT4gPHJkZjpEZXNjcmlwdGlvbiB4bXBHOmdyb3VwTmFtZT0iR3JvdXBlIGRlIG51YW5jZXMgcGFyIGTDqWZhdXQiIHhtcEc6Z3JvdXBUeXBlPSIwIj4gPHhtcEc6Q29sb3JhbnRzPiA8cmRmOlNlcT4gPHJkZjpsaSB4bXBHOnN3YXRjaE5hbWU9IkJsYW5jIiB4bXBHOm1vZGU9IkNNWUsiIHhtcEc6dHlwZT0iUFJPQ0VTUyIgeG1wRzpjeWFuPSIwLjAwMDAwMCIgeG1wRzptYWdlbnRhPSIwLjAwMDAwMCIgeG1wRzp5ZWxsb3c9IjAuMDAwMDAwIiB4bXBHOmJsYWNrPSIwLjAwMDAwMCIvPiA8cmRmOmxpIHhtcEc6c3dhdGNoTmFtZT0iUEFOVE9ORSAxMDM0OCBDIiB4bXBHOnR5cGU9IlNQT1QiIHhtcEc6dGludD0iMTAwLjAwMDAwMCIgeG1wRzptb2RlPSJMQUIiIHhtcEc6TD0iNTYuNDcwNTg5IiB4bXBHOkE9IjUiIHhtcEc6Qj0iMjUiLz4gPHJkZjpsaSB4bXBHOnN3YXRjaE5hbWU9IlBBTlRPTkUgMjk2IEMiIHhtcEc6dHlwZT0iU1BPVCIgeG1wRzp0aW50PSIxMDAuMDAwMDAwIiB4bXBHOm1vZGU9IkxBQiIgeG1wRzpMPSI5LjAxOTYwOCIgeG1wRzpBPSItNCIgeG1wRzpCPSItMTQiLz4gPC9yZGY6U2VxPiA8L3htcEc6Q29sb3JhbnRzPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6bGk+IDwvcmRmOlNlcT4gPC94bXBUUGc6U3dhdGNoR3JvdXBzPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pv2ufucAADf8SURBVHic7d15vNx0vf/xV1kFIbSIbIbFFjcIihQBN0AoCHq5glrUuOH1EnC9ikt7rxgx6rVVr9sV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SbzQsp2xxaza3NuXp0ja/DSJCxUHyxL0JXQuTuYBbe2lJ03iZZbtzKVzz/Mcy3YWVvn6ZvPHOw3lnpk95lm2sxQzn3u8xouRCuN5CsR1XdqsYtMqboRYmiZxqyupl1T1+QKo9LodxyDGDLo2RUREZMi1MpEGUyW56RgKyDOsu3CSlSWhIWuGJ49numU7s7Jh1K2UJnHYJbGdhkm0D67wsEWG2k8nX7X4ThY18BpUXbBtMS1fkqykOgrcjYweqcsgxgy6NkVERGTItW5o96DJWWRsUYkeoDwJeNuLjkH3wmOzKqyuDXAU/RtqvTQ7noiIiIiITAJKpMvLk/z1PPQ6S8C7JYSz21x0DFaPMOh2HuZlw9mrON6yNIkPxsyrr7P3bTFw8KCshy0iIiIiIuUpkS6vW7GvpRUM+c3TK932omNkc8Q7JbUjQ7yrPGaYJvEMOleD79X8NIn3avHcfRERERERqYES6RKyeb/deoJLF6DKiux0S9YGYXg3dK+8PruC9Z7XkSbx/CyhPhjzmvSa/C7Lnj+jaPE4EREREREZDnUUG5soQen30Ndl1F9QZ3aXY0yjukrOIV2S5RqKjlX+WqZJvMiynYWYatgTmQeMrdpeiez8LALI1pMeeYxXcGwaawozLR55NDCMu1893lX/Xv14D46nn8es6pwNYswwuNemiIiISClTVq1a1XQMIiIiIiIiIgNDQ7tFREREREREClAiLSIiIiIiIlKAEmkRERERERGRApRIi4iIiIiIiBSgRFpERERERESkACXSIiIiIiIiIgUokRYREREREREpQIm0iIiIiIiISAFKpEVEREREREQKUCItIiIiIiIiUoASaREREREREZEClEiLiIiIiIiIFKBEWkRERERERKQAJdIiIiIiIiIiBSiRFhERERERESlAibSIiIiIiIhIAUqkRURERERERApQIi0iIiIiIiJSgBJpERERERERkQKUSIuIiIiIiIgUoERaREREREREpAAl0iIiIiIiIiIFKJEWERERERERKeD/AwFMBWbNiD92AAAAAElFTkSuQmCC" alt="Eurallia Finance Marseille">
+    <div class="tag">Support de formation : la valorisation d'entreprise<br>Version 2 du 30 octobre 2026</div>
+  </div>
+  <div class="progress"><span id="bar"></span></div>
+</header>
+
+<div class="layout">
+<nav class="side" id="nav">
+  <a href="#accueil">Accueil</a>
+  <a href="#m1">1. Valeur, prix, titres</a>
+  <a href="#m2">2. Lire le compte de résultat</a>
+  <a href="#m3">3. De l'EBE à l'EBITDA</a>
+  <a href="#m4">4. La dette nette</a>
+  <a href="#m5">5. Les multiples</a>
+  <a href="#m6">6. Rentabilité et taux</a>
+  <a href="#m6b">7. La méthode des banquiers</a>
+  <a href="#m7">8. L'approche patrimoniale</a>
+  <a href="#m8">9. Combiner les méthodes</a>
+  <a href="#m9">10. Les décotes</a>
+  <a href="#simulateur">Simulateur</a>
+  <a href="#reflexes">Réflexes du conseil</a>
+  <a href="#glossaire">Glossaire</a>
+</nav>
+
+<main>
+
+<!-- ============================================================ ACCUEIL -->
+<section id="accueil" class="hero">
+  <div class="kicker">Formation</div>
+  <h1>Combien vaut une entreprise ?</h1>
+  <p class="lead">Un parcours en dix modules pour comprendre comment on passe des comptes d'une PME à la valeur de ses titres. Il s'adresse à des étudiants, à des juniors et à toute personne qui n'a pas de formation financière.</p>
+  <p class="lead">Chaque module tient en dix minutes : une idée, un exemple chiffré, puis un quiz corrigé. Le simulateur final permet de refaire le calcul complet.</p>
+  <div class="pills">
+    <span class="pill">Aucun prérequis</span>
+    <span class="pill">10 modules et un simulateur</span>
+    <span class="pill">Exemples fictifs</span>
+    <span class="pill">Sources : guide DGFiP 2026, CCEF 2026</span>
+  </div>
+</section>
+
+<!-- ============================================================ M1 -->
+<section id="m1" data-mod>
+  <div class="kicker">Module 1</div>
+  <h2>Valeur, prix et valeur des titres</h2>
+  <p class="lead">Une entreprise n'a pas une valeur unique et objective. Elle a une valeur estimée, puis un prix négocié.</p>
+
+  <h3>La valeur s'estime, le prix se négocie</h3>
+  <p>L'évaluateur estime une valeur à partir des comptes, du marché et des perspectives. Le prix, lui, résulte d'une négociation entre un vendeur et un acheteur, avec leurs contraintes : financement disponible, urgence, synergies attendues. Un bon conseil sait expliquer l'écart entre les deux.</p>
+
+  <h3>Valeur d'entreprise et valeur des titres</h3>
+  <p>Imaginez une maison achetée 300 000 € avec un crédit dont il reste 100 000 € à rembourser. La maison vaut 300 000 €, mais le propriétaire ne récupérera que 200 000 € en la vendant. Pour une société, c'est pareil.</p>
+  <div class="bridge">
+    <div class="blk b1">Valeur d'entreprise (VE)<br><small>la valeur de l'activité, de la « maison »</small></div>
+    <div class="op">-</div>
+    <div class="blk b2">Dette nette<br><small>dettes financières moins trésorerie</small></div>
+    <div class="op">=</div>
+    <div class="blk b3">Valeur des titres<br><small>ce que reçoit l'actionnaire</small></div>
+  </div>
+  <p>Si la société a plus de trésorerie que de dettes, la dette nette est négative : la valeur des titres dépasse alors la valeur d'entreprise.</p>
+
+  <div class="box fisc"><b class="t">Le regard de l'administration fiscale</b>Pour l'impôt, il n'existe pas de « valeur fiscale ». L'administration recherche la valeur vénale : le prix qui résulterait du jeu normal de l'offre et de la demande, à la date de l'opération (guide DGFiP 2026, p. 4 et 5). Si les titres ont été cédés récemment entre parties indépendantes, ce prix s'impose avant toute méthode (p. 5 et 6).</div>
+
+  <div class="box key"><b class="t">À retenir</b>On évalue l'activité (la VE), on passe à la valeur des titres par la dette nette, et l'on date tout au même jour.</div>
+
+  <div class="quiz" data-quiz="q1"></div>
+  <div class="next"><span></span><a href="#m2">Module 2 →</a></div>
+</section>
+
+<!-- ============================================================ M2 -->
+<section id="m2" data-mod>
+  <div class="kicker">Module 2</div>
+  <h2>Lire le compte de résultat jusqu'à l'EBE</h2>
+  <p class="lead">L'excédent brut d'exploitation (EBE) mesure ce que l'activité rapporte avant les investissements, la dette et l'impôt. C'est l'agrégat central de la valorisation des PME.</p>
+
+  <h3>La cascade, sur une PME fictive</h3>
+  <p>La société ALPHA (exemple fictif) fabrique des menuiseries. Son dernier exercice :</p>
+  <div class="cascade">
+    <div><span>Chiffre d'affaires</span><span>5 000 000 €</span></div>
+    <div class="minus"><span>- Achats et charges externes</span><span>- 2 100 000 €</span></div>
+    <div class="res"><span>= Valeur ajoutée</span><span>2 900 000 €</span></div>
+    <div class="minus"><span>- Impôts et taxes</span><span>- 90 000 €</span></div>
+    <div class="minus"><span>- Salaires et charges sociales</span><span>- 2 160 000 €</span></div>
+    <div class="res"><span>= EBE</span><span>650 000 €</span></div>
+    <div class="minus"><span>- Amortissements</span><span>- 150 000 €</span></div>
+    <div class="res"><span>= Résultat d'exploitation</span><span>500 000 €</span></div>
+  </div>
+  <p>L'EBE se lit comme une marge : ici 13 % du chiffre d'affaires. On le compare aux entreprises du même secteur, puis on regarde son évolution sur trois à quatre exercices.</p>
+
+  <h3>Pourquoi plusieurs exercices ?</h3>
+  <p>Une seule année peut être exceptionnelle, dans un sens ou dans l'autre. On calcule donc une moyenne, souvent pondérée pour donner plus de poids au dernier exercice : coefficient 1 pour N-2, 2 pour N-1, 3 pour N. Ce choix se justifie par l'histoire de l'entreprise ; le guide de l'administration l'utilise dans ses exemples mais demande qu'il soit motivé (note 71).</p>
+  <table>
+    <tr><th>Exercice</th><th class="n">EBE</th><th class="n">Poids</th></tr>
+    <tr><td>N-2</td><td class="n">570 000</td><td class="n">1</td></tr>
+    <tr><td>N-1</td><td class="n">610 000</td><td class="n">2</td></tr>
+    <tr><td>N</td><td class="n">650 000</td><td class="n">3</td></tr>
+    <tr class="tot"><td>Moyenne pondérée</td><td class="n">623 333</td><td class="n">6</td></tr>
+  </table>
+  <p class="small">Calcul : (560 000 × 1 + 610 000 × 2 + 650 000 × 3) / 6 = 623 333 €.</p>
+
+  <div class="quiz" data-quiz="q2"></div>
+  <div class="next"><a href="#m1">← Module 1</a><a href="#m3">Module 3 →</a></div>
+</section>
+
+<!-- ============================================================ M3 -->
+<section id="m3" data-mod>
+  <div class="kicker">Module 3</div>
+  <h2>De l'EBE comptable à l'EBITDA économique</h2>
+  <p class="lead">L'EBE des comptes ne dit pas toujours ce qu'un repreneur gagnera. On le « retraite » pour obtenir un agrégat normal, durable et comparable.</p>
+
+  <h3>Première étape : l'EBE retraité</h3>
+  <p>On corrige ce qui tient à la situation du propriétaire actuel, ou à une année particulière :</p>
+  <table>
+    <tr><th>Retraitement</th><th>Exemple</th><th>Sens</th></tr>
+    <tr><td>Rémunération du dirigeant</td><td>Le dirigeant se verse 40 000 € alors qu'un directeur salarié coûterait 110 000 € chargés</td><td>EBE diminué de 70 000 €</td></tr>
+    <tr><td>Loyer versé à la SCI du dirigeant</td><td>Loyer de 90 000 € pour un bâtiment qui se louerait 60 000 €</td><td>EBE augmenté de 30 000 €</td></tr>
+    <tr><td>Charge ou produit non récurrent</td><td>Litige ponctuel, déménagement</td><td>Neutralisé</td></tr>
+    <tr><td>Dépenses personnelles</td><td>Véhicule ou voyage privé payé par la société</td><td>EBE augmenté, pièces à l'appui</td></tr>
+  </table>
+  <div class="box warn"><b class="t">Piège</b>La rémunération du dirigeant se normalise dans les deux sens. Une rémunération élevée peut aussi s'expliquer par une performance exceptionnelle (guide DGFiP, p. 61). Un retraitement se justifie toujours par une source : convention collective, étude de rémunération, loyer de marché.</div>
+
+  <h3>Deuxième étape : l'EBITDA économique</h3>
+  <p>Les multiples de marché sont calculés sur un EBITDA, agrégat proche de l'EBE mais défini autrement. L'administration le rappelle : on ne peut pas appliquer un multiple d'EBITDA à un EBE comptable (guide DGFiP, p. 30). Il faut donc compléter le passage.</p>
+  <table>
+    <tr><th>Poste</th><th>Traitement</th></tr>
+    <tr><td>Autres produits et charges de gestion courante</td><td>Intégrés : ils font partie de l'activité</td></tr>
+    <tr><td>Participation des salariés</td><td>Déduite : c'est une charge de personnel qui reviendra chaque année</td></tr>
+    <tr><td>Provisions courantes (clients douteux, litiges d'exploitation)</td><td>Déduites si elles se répètent d'une année sur l'autre</td></tr>
+    <tr><td>Crédits d'impôt (recherche, innovation)</td><td>Viennent réduire les charges qu'ils financent, s'ils sont récurrents</td></tr>
+    <tr><td>Loyers de crédit-bail</td><td>Au choix, mais de façon cohérente : voir l'encadré</td></tr>
+  </table>
+  <div class="box key"><b class="t">Le crédit-bail : tout ou rien</b>Si l'on retire les loyers de crédit-bail des charges (l'EBITDA augmente), il faut ajouter le capital restant dû des contrats à la dette nette. Faire l'un sans l'autre surévalue l'entreprise. Le bon choix dépend des comparables utilisés pour le multiple.</div>
+
+  <div class="box cab"><b class="t">Dans la pratique du cabinet</b>Le passage se fait ligne par ligne, de l'EBE comptable à l'EBE retraité puis à l'EBITDA économique. Chaque arbitrage (crédit-bail, provisions, crédits d'impôt) est noté dans un journal des décisions, pour pouvoir l'expliquer au client.</div>
+
+  <div class="quiz" data-quiz="q3"></div>
+  <div class="next"><a href="#m2">← Module 2</a><a href="#m4">Module 4 →</a></div>
+</section>
+
+<!-- ============================================================ M4 -->
+<section id="m4" data-mod>
+  <div class="kicker">Module 4</div>
+  <h2>La dette nette : de la VE à la valeur des titres</h2>
+  <p class="lead">La dette nette fait souvent bouger le prix final plus que le multiple. C'est aussi là que se logent les mauvaises surprises.</p>
+
+  <h3>Un inventaire, pas une ligne</h3>
+  <p>La dette nette regroupe toutes les dettes de nature financière, quelle que soit leur échéance, moins la trésorerie disponible à la date de l'opération. La prise en compte de la trésorerie n'est pas optionnelle (guide DGFiP, p. 17).</p>
+  <table>
+    <tr><th>Augmente la dette nette</th><th>Diminue la dette nette</th></tr>
+    <tr><td>Emprunts bancaires, découverts</td><td>Disponibilités</td></tr>
+    <tr><td>Comptes courants d'associés à rembourser</td><td>Placements de trésorerie</td></tr>
+    <tr><td>Capital restant dû du crédit-bail, si les loyers ont été retraités</td><td>Créances sur les associés ou le groupe</td></tr>
+    <tr><td>Participation et intéressement dus aux salariés</td><td>Actif hors exploitation vendable (terrain inutilisé)</td></tr>
+    <tr><td>Dividendes votés non versés, dettes fiscales anciennes</td><td></td></tr>
+    <tr><td>Indemnités de départ en retraite, nettes d'impôt</td><td></td></tr>
+  </table>
+
+  <h3>Exemple</h3>
+  <table>
+    <tr><th>ALPHA (fictif)</th><th class="n">Montant</th></tr>
+    <tr><td>Valeur d'entreprise</td><td class="n">3 900 000</td></tr>
+    <tr><td>Emprunts bancaires</td><td class="n">- 600 000</td></tr>
+    <tr><td>Compte courant du dirigeant</td><td class="n">- 150 000</td></tr>
+    <tr><td>Participation due aux salariés</td><td class="n">- 40 000</td></tr>
+    <tr><td>Trésorerie disponible</td><td class="n">+ 820 000</td></tr>
+    <tr class="tot"><td>Valeur des titres</td><td class="n">3 930 000</td></tr>
+  </table>
+
+  <h3>Quelle trésorerie s'ajoute au prix ?</h3>
+  <p>Toute la trésorerie n'est pas « en trop ». L'entreprise doit garder de quoi fonctionner : l'usage est de conserver, par sécurité, <b>trois mois de charges fixes</b> (salaires, loyers, assurances, abonnements). Les banques qui financent la reprise peuvent exiger davantage, par exemple de garder en permanence <b>l'équivalent d'une annuité de la dette senior</b>, c'est-à-dire l'emprunt principal de l'acquisition.</p>
+  <table>
+    <tr><th>ALPHA (fictif)</th><th class="n">Montant</th></tr>
+    <tr><td>Trésorerie disponible à la clôture</td><td class="n">820 000</td></tr>
+    <tr><td>- Trois mois de charges fixes (2 000 000 € par an / 4)</td><td class="n">- 500 000</td></tr>
+    <tr class="tot"><td>Trésorerie excédentaire, ajoutée au prix dans la négociation</td><td class="n">320 000</td></tr>
+  </table>
+  <p class="small">Ce point se négocie. L'administration fiscale, elle, retient la trésorerie telle qu'elle est et n'admet de correction que si le besoin en fonds de roulement de clôture n'est pas représentatif, preuves à l'appui (guide DGFiP p. 13 et 17).</p>
+
+  <div class="box warn"><b class="t">Trois pièges fréquents</b>Une trésorerie gonflée à la date de clôture (activité saisonnière, clients qui paient en décembre) ; un compte courant oublié ; une participation due aux salariés non déduite. Dans le premier cas, on calcule un besoin en fonds de roulement normal, preuves à l'appui.</div>
+
+  <div class="quiz" data-quiz="q4"></div>
+  <div class="next"><a href="#m3">← Module 3</a><a href="#m5">Module 5 →</a></div>
+</section>
+
+<!-- ============================================================ M5 -->
+<section id="m5" data-mod>
+  <div class="kicker">Module 5</div>
+  <h2>Les multiples</h2>
+  <p class="lead">Un multiple traduit en une seule règle ce que le marché paie pour des entreprises comparables : « telle activité se vend environ six fois son EBITDA ».</p>
+
+  <h3>Le principe</h3>
+  <p>Valeur d'entreprise = EBITDA économique × multiple. Avec un EBITDA de 623 000 € et un multiple de 6,3, la VE vaut 3 925 000 €. Le multiple doit venir d'entreprises vraiment comparables : même secteur, même taille, même définition de l'EBITDA, même période.</p>
+
+  <h3>La taille compte</h3>
+  <p>Plus une entreprise est petite, plus elle est risquée pour un acquéreur, et plus son multiple est bas. La CCEF publie chaque année des multiples par secteur et par taille. Extrait des moyennes tous secteurs (février 2026, hors IFRS 16) :</p>
+  <div class="scroll"><table>
+    <tr><th>EBITDA de l'entreprise</th><th class="n">1 M€</th><th class="n">5 M€</th><th class="n">10 M€</th><th class="n">50 M€</th><th class="n">100 M€</th></tr>
+    <tr><td>Multiple VE / EBITDA moyen</td><td class="n">5,6x</td><td class="n">6,3x</td><td class="n">6,7x</td><td class="n">7,8x</td><td class="n">8,4x</td></tr>
+    <tr><td>Multiple VE / EBIT moyen</td><td class="n">7,7x</td><td class="n">8,7x</td><td class="n">9,3x</td><td class="n">10,9x</td><td class="n">11,8x</td></tr>
+  </table></div>
+  <p class="small">Source : CCEF, hors-série n° 18, février 2026, tableaux 5 et 7. Les écarts entre secteurs sont importants : de 3,5x (automobile) à 10,4x (foncières cotées) pour 1 M€ d'EBITDA.</p>
+
+  <h3>D'où viennent les multiples ?</h3>
+  <p>Quatre sources, de la plus proche à la plus lointaine : une transaction récente sur les titres de la même société ; des cessions de sociétés comparables non cotées ; des sociétés cotées comparables, corrigées de leur taille ; des baromètres sectoriels, utiles surtout pour vérifier l'ordre de grandeur (guide DGFiP, p. 31 à 33).</p>
+
+  <div class="box fisc"><b class="t">Le regard de l'administration</b>Les multiples boursiers reflètent la position d'un actionnaire minoritaire d'une société liquide. Pour une PME non cotée, l'administration admet une décote d'illiquidité ; pour un bloc de contrôle, une prime de contrôle peut se discuter (guide, p. 53 et 54).</div>
+
+  <div class="quiz" data-quiz="q5"></div>
+  <div class="next"><a href="#m4">← Module 4</a><a href="#m6">Module 6 →</a></div>
+</section>
+
+<!-- ============================================================ M6 -->
+<section id="m6" data-mod>
+  <div class="kicker">Module 6</div>
+  <h2>Rentabilité et taux</h2>
+  <p class="lead">Acheter une entreprise, c'est acheter des bénéfices futurs. Plus ces bénéfices sont risqués, moins on les paie cher.</p>
+
+  <h3>L'idée de la capitalisation</h3>
+  <p>Si un placement rapporte 100 000 € par an et que l'investisseur exige 10 % de rendement, il le paiera 1 000 000 €. C'est la capitalisation : valeur = bénéfice durable / taux exigé. Si le bénéfice croît chaque année d'un taux g, la formule devient bénéfice × (1 + g) / (taux - g).</p>
+
+  <h3>D'où vient le taux exigé ?</h3>
+  <p>On l'additionne en trois couches :</p>
+  <table>
+    <tr><th>Composante</th><th>Ce qu'elle rémunère</th><th class="n">Repère 2026</th></tr>
+    <tr><td>Taux sans risque</td><td>Le placement le plus sûr : l'emprunt d'État à 10 ans</td><td class="n">3,48 %</td></tr>
+    <tr><td>Prime de risque du marché × bêta</td><td>Le risque d'une action, modulé selon le secteur (bêta proche de 1 pour la moyenne)</td><td class="n">4,95 % × bêta</td></tr>
+    <tr><td>Prime de taille</td><td>Le surcroît de risque d'une petite entreprise : dépendance au dirigeant, clients concentrés, moindre liquidité</td><td class="n">6,25 % pour 1 M€ d'EBITDA</td></tr>
+  </table>
+  <p class="small">Source : CCEF, février 2026. La prime de taille baisse avec la taille : 4,79 % pour 5 M€, 2,06 % pour 100 M€ d'EBITDA.</p>
+
+  <div class="mini">
+    <span>Taux exigé (%)</span><input id="mk" type="number" step="0.5" value="14">
+    <span>Croissance g (%)</span><input id="mg" type="number" step="0.5" value="2">
+    <span>Multiple implicite du bénéfice :</span><output id="mo">8,5</output>
+  </div>
+  <p class="small">Le multiple implicite vaut (1 + g) / (taux - g). Un taux qui monte de deux points fait baisser fortement la valeur : essayez.</p>
+
+  <div class="box key"><b class="t">Le lien avec le module 5</b>Taux et multiples disent la même chose de deux façons. Un taux exigé élevé correspond à un multiple bas. Un évaluateur vérifie que les deux méthodes donnent des ordres de grandeur cohérents.</div>
+
+  <div class="box"><b class="t">Pour information : la méthode DCF</b>La méthode des flux de trésorerie actualisés (DCF, pour « discounted cash flows ») projette les flux de trésorerie sur cinq ans à partir d'un plan d'affaires, puis les ramène à aujourd'hui avec le taux exigé. Elle existe et il faut la connaître, mais elle est très rarement utilisée pour les PME : elle suppose un plan d'affaires fiable et une entreprise déjà de taille significative. On la rencontre surtout dans les levées de fonds. L'administration fiscale l'examine quand on la lui présente, mais l'applique rarement elle-même (guide DGFiP, p. 25).</div>
+
+  <div class="quiz" data-quiz="q6"></div>
+  <div class="next"><a href="#m5">← Module 5</a><a href="#m6b">Module 7 →</a></div>
+</section>
+
+<!-- ============================================================ M6b -->
+<section id="m6b" data-mod>
+  <div class="kicker">Module 7</div>
+  <h2>La méthode des banquiers</h2>
+  <p class="lead">Une question très concrète : combien un repreneur peut-il payer, compte tenu de ce que les banques accepteront de lui prêter ?</p>
+
+  <h3>Le raisonnement</h3>
+  <p>Le repreneur financera l'achat en grande partie par un emprunt, remboursé avec la trésorerie que dégage l'entreprise. Le banquier raisonne en trois temps.</p>
+  <table>
+    <tr><th>Étape</th><th>Règle d'usage</th><th class="n">ALPHA (fictif)</th></tr>
+    <tr><td>1. Capacité d'autofinancement (CAF) moyenne</td><td>Ce que l'activité dégage chaque année, après impôt</td><td class="n">450 000 €</td></tr>
+    <tr><td>2. Part de la CAF consacrée à la dette</td><td>70 % ; le reste couvre les investissements courants et les imprévus</td><td class="n">315 000 € par an</td></tr>
+    <tr><td>3. Emprunt possible</td><td>Ces annuités sur 7 ans, au taux du marché (5 % ici)</td><td class="n">1 822 708 €</td></tr>
+    <tr><td>4. Prix finançable</td><td>Le repreneur apporte 30 % en fonds propres : prix = emprunt / 70 %</td><td class="n">2 603 868 €</td></tr>
+  </table>
+  <p class="small">Calcul de l'emprunt : 315 000 × [1 - 1,05<sup>-7</sup>] / 0,05 = 1 822 708 €. La matrice du cabinet fait le même calcul avec des mensualités, ce qui donne un montant un peu plus élevé.</p>
+
+  <div class="mini">
+    <span>CAF (€)</span><input id="bk_caf" type="number" step="10000" value="450000">
+    <span>Part (%)</span><input id="bk_part" type="number" step="5" value="70">
+    <span>Durée (ans)</span><input id="bk_n" type="number" step="1" value="7">
+    <span>Taux (%)</span><input id="bk_t" type="number" step="0.25" value="5">
+    <span>Apport (%)</span><input id="bk_ap" type="number" step="5" value="30">
+    <span>Prix finançable :</span><output id="bk_out"></output>
+  </div>
+
+  <h3>Valeur d'entreprise ou valeur des titres ?</h3>
+  <p>Le prix finançable est une <b>valeur d'entreprise</b>. Le banquier finance le rachat d'une activité, en supposant qu'elle est reprise sans dette financière et avec une trésorerie normale. Pour obtenir la valeur des titres, on corrige donc de la dette nette, comme pour un multiple : on retranche les dettes financières et on ajoute la trésorerie excédentaire.</p>
+  <table>
+    <tr><th>ALPHA (fictif)</th><th class="n">Montant</th></tr>
+    <tr><td>Prix finançable (valeur d'entreprise)</td><td class="n">2 603 868</td></tr>
+    <tr><td>+ Trésorerie nette (module 4)</td><td class="n">+ 30 000</td></tr>
+    <tr class="tot"><td>Valeur des titres selon la méthode des banquiers</td><td class="n">2 633 868</td></tr>
+  </table>
+  <div class="box cab"><b class="t">Dans la pratique du cabinet</b>La méthode des banquiers sert de garde-fou : si le prix demandé dépasse nettement le prix finançable, la transaction a peu de chances de trouver son financement, quel que soit le multiple du secteur. Elle est traitée comme une méthode de valeur d'entreprise, au même titre que les multiples d'EBITDA et la capitalisation de la CAF.</div>
+  <div class="box fisc"><b class="t">Le regard de l'administration</b>Le guide DGFiP ne présente pas cette méthode. Elle reste un recoupement utile en négociation ; dans un dossier fiscal, elle complète les méthodes reconnues sans les remplacer.</div>
+
+  <div class="quiz" data-quiz="q6b"></div>
+  <div class="next"><a href="#m6">← Module 6</a><a href="#m7">Module 8 →</a></div>
+</section>
+
+<!-- ============================================================ M7 -->
+<section id="m7" data-mod>
+  <div class="kicker">Module 8</div>
+  <h2>L'approche patrimoniale</h2>
+  <p class="lead">Une autre façon de voir : que vaut tout ce que possède l'entreprise, une fois ses dettes payées ?</p>
+
+  <h3>L'actif net réévalué</h3>
+  <p>On part des capitaux propres du bilan et on corrige chaque poste à sa valeur réelle : un terrain acheté il y a trente ans, un bâtiment amorti, un fonds de commerce créé et jamais inscrit au bilan. Cette méthode donne directement la valeur des titres : on ne retranche pas la dette nette une seconde fois.</p>
+  <table>
+    <tr><th>Actif net réévalué d'ALPHA (fictif)</th><th class="n">Montant</th></tr>
+    <tr><td>Capitaux propres comptables</td><td class="n">1 800 000</td></tr>
+    <tr><td>+ Plus-value sur le bâtiment</td><td class="n">350 000</td></tr>
+    <tr><td>+ Valeur de la clientèle non inscrite au bilan</td><td class="n">600 000</td></tr>
+    <tr><td>- Frais d'établissement (sans valeur)</td><td class="n">- 20 000</td></tr>
+    <tr class="tot"><td>Actif net réévalué</td><td class="n">2 730 000</td></tr>
+  </table>
+
+  <h3>Le fonds de commerce et le goodwill</h3>
+  <p>Pour un commerce de détail, on compare à des cessions de fonds proches, puis on recoupe avec les barèmes professionnels exprimés en pourcentage du chiffre d'affaires (guide DGFiP, p. 38 et 39). Pour une entreprise plus importante, le goodwill mesure ce qu'elle gagne au-delà de la rémunération normale de ses capitaux.</p>
+
+  <div class="box key"><b class="t">Quand cette approche domine</b>Pour une société qui détient surtout un patrimoine (SCI, holding sans activité), la valeur patrimoniale est la référence, avec une décote. Pour une PME de services, qui a peu d'actifs, elle sous-estime la valeur : on lui donne peu de poids.</div>
+
+  <div class="quiz" data-quiz="q7"></div>
+  <div class="next"><a href="#m6b">← Module 7</a><a href="#m8">Module 9 →</a></div>
+</section>
+
+<!-- ============================================================ M8 -->
+<section id="m8" data-mod>
+  <div class="kicker">Module 9</div>
+  <h2>Combiner les méthodes</h2>
+  <p class="lead">Aucune méthode ne suffit seule. L'évaluateur les combine, explique leurs écarts, puis ajuste avec prudence.</p>
+
+  <h3>Combiner</h3>
+  <p>En négociation, on présente souvent une fourchette : bas, central, haut. Pour un acte fiscal (donation, apport à une holding, transmission), il faut une valeur unique, issue d'une combinaison motivée (guide DGFiP, p. 49). L'administration publie des pondérations indicatives, par exemple pour un bloc majoritaire d'une petite PME : (3 × valeur patrimoniale + valeur de rentabilité) / 4.</p>
+
+  <h3>Une valeur par méthode, puis une moyenne</h3>
+  <p>Chaque méthode est d'abord ramenée à une valeur des titres : on ajoute la trésorerie nette aux méthodes qui donnent une valeur d'entreprise (multiples, CAF, méthode des banquiers), pas à celles qui donnent déjà une valeur des titres (patrimoniale, bénéfice net capitalisé). C'est seulement ensuite qu'on fait la moyenne, puis qu'on applique une éventuelle décote (module 10).</p>
+
+  <h3>Le contrôle final</h3>
+  <p>Une fois la valeur retenue, on la divise par l'EBITDA : le multiple obtenu doit rester dans l'ordre de grandeur du secteur. Si ce n'est pas le cas, il faut pouvoir l'expliquer (croissance, marge, dépendance).</p>
+
+  <div class="quiz" data-quiz="q8"></div>
+  <div class="next"><a href="#m7">← Module 8</a><a href="#m9">Module 10 →</a></div>
+</section>
+
+<!-- ============================================================ M9 -->
+<section id="m9" data-mod>
+  <div class="kicker">Module 10</div>
+  <h2>Les décotes : quand, combien, pourquoi</h2>
+  <p class="lead">Une décote réduit la valeur pour tenir compte d'un risque ou d'une contrainte que les méthodes n'ont pas déjà intégré. Ce n'est jamais un pourcentage automatique.</p>
+
+  <h3>Le principe</h3>
+  <p>L'administration admet les décotes, mais à trois conditions (guide DGFiP, p. 52) : elles sont justifiées par la situation précise de l'entreprise et des titres ; elles ne comptent pas deux fois le même risque ; quand plusieurs motifs se cumulent, on fixe une décote globale, sans additionner les pourcentages.</p>
+
+  <h3>Les principales décotes</h3>
+  <div class="scroll"><table>
+    <tr><th>Décote</th><th>Pourquoi</th><th>Quand</th><th>Ordre de grandeur</th><th>Position de l'administration</th></tr>
+    <tr><td>Minorité</td><td>Le minoritaire ne décide ni de la stratégie ni des dividendes</td><td>Paquet minoritaire évalué avec des méthodes qui supposent le contrôle</td><td>Au cas par cas</td><td>Préfère des pondérations différentes selon le paquet ; refusée avec la valeur de rendement, les multiples boursiers ou le DCF, qui intègrent déjà la position minoritaire (p. 52 et 53)</td></tr>
+    <tr><td>Illiquidité</td><td>Des titres non cotés se revendent lentement et avec difficulté</td><td>Valeur fondée sur des données boursières, ou sur la seule valeur patrimoniale</td><td>20 % dans les exemples du guide</td><td>Admise dans ces deux cas ; inutile si la combinaison des méthodes donne déjà la valeur réelle (p. 53 et 54)</td></tr>
+    <tr><td>Taille</td><td>Une petite entreprise est plus fragile</td><td>Rarement en décote : elle se loge dans le taux, sous forme de prime de taille</td><td>Prime CCEF : 6,25 % du taux pour 1 M€ d'EBITDA (2026)</td><td>Jamais en plus d'une prime de taille ni d'une décote d'illiquidité (p. 20 et 54)</td></tr>
+    <tr><td>Incessibilité</td><td>Clause d'agrément, pacte qui limite la vente</td><td>Surtout pour un minoritaire</td><td>10 % retenus par la Cour de cassation (1997)</td><td>Un pacte ne justifie pas d'abattement s'il apporte aussi des avantages ; un engagement Dutreil ou une clause d'inaliénabilité de donation est sans effet (p. 54 et 55)</td></tr>
+    <tr><td>Homme-clé</td><td>L'entreprise dépend de son dirigeant</td><td>Départ du dirigeant sans relève organisée</td><td>10 points dans un arrêt de la cour d'appel de Bordeaux (2016)</td><td>Reconnue, mais atténuée par une succession préparée ou une assurance ; refusée si la dépendance n'est pas prouvée (CAA Lyon, 2025) ; souvent déjà dans la prime de taille (p. 55)</td></tr>
+    <tr><td>Holding</td><td>Frais de structure, complexité, illiquidité des participations</td><td>Holding évaluée par son actif net</td><td>10 % dans l'exemple du guide (filiale unique, sans dette)</td><td>Globale et exclusive des autres ; limitée avec une filiale unique, nulle sur la trésorerie, pas d'empilement en cascade (p. 55 et 56)</td></tr>
+    <tr><td>SCI</td><td>Les parts d'une SCI se vendent moins facilement qu'un immeuble</td><td>SCI évaluée par sa seule valeur patrimoniale</td><td>10 % à titre indicatif</td><td>Admise (fiche 4) ; la décote pour fiscalité latente est en revanche refusée par le juge</td></tr>
+  </table></div>
+  <p class="small">Sources : DGFiP, guide de juin 2026, partie 4 et fiches 3 et 4 ; CAA Bordeaux, 22 novembre 2016, n° 14BX03020 (le guide imprime par erreur 14BX03320) ; CAA Lyon, 3 avril 2025, n° 23LY02852 ; CCEF, février 2026.</p>
+
+  <div class="box warn"><b class="t">La règle d'or : un risque ne se compte qu'une fois</b>Si la taille et la dépendance aux clients ont servi à justifier un multiple bas ou un taux élevé, elles ne peuvent plus justifier une décote. Une décote de 30 % fondée sur quatre motifs qui se recoupent ne résiste pas à un contrôle ; une décote de 15 % fondée sur un seul risque bien démontré, si.</div>
+
+  <h3>Comment rédiger une décote défendable</h3>
+  <ol class="check">
+    <li>Nommer le risque précis que les méthodes n'intègrent pas.</li>
+    <li>Le prouver par des faits : âge du dirigeant, absence de successeur, poids du premier client, clauses des statuts.</li>
+    <li>Montrer qu'il n'est pas déjà dans le multiple, le taux ou la pondération.</li>
+    <li>Fixer un taux unique, en s'appuyant sur le guide et la jurisprudence.</li>
+    <li>Présenter la sensibilité de la valeur à ce taux (par exemple 10, 15 et 20 %).</li>
+  </ol>
+
+  <div class="quiz" data-quiz="q9"></div>
+  <div class="next"><a href="#m8">← Module 9</a><a href="#simulateur">Simulateur →</a></div>
+</section>
+
+<!-- ============================================================ SIMULATEUR -->
+<section id="simulateur">
+  <div class="kicker">Atelier</div>
+  <h2>Simulateur : de l'EBE à la valeur des titres</h2>
+  <p>Modifiez les montants : le calcul se fait instantanément, sans rien envoyer nulle part. Les valeurs proposées reprennent l'exemple fictif ALPHA.</p>
+  <div class="sim">
+    <div>
+      <fieldset><legend>1. EBITDA économique</legend>
+        <label>EBE retraité moyen (€)<input type="number" id="s_ebe" value="623000" step="1000"></label>
+        <label>+ Autres produits de gestion (€)<input type="number" id="s_ap" value="10000" step="1000"></label>
+        <label>- Autres charges de gestion (€)<input type="number" id="s_ac" value="5000" step="1000"></label>
+        <label>- Participation des salariés (€)<input type="number" id="s_part" value="35000" step="1000"></label>
+        <label>- Provisions récurrentes (€)<input type="number" id="s_prov" value="0" step="1000"></label>
+        <label>+ Crédits d'impôt récurrents (€)<input type="number" id="s_cir" value="0" step="1000"></label>
+        <label>Retraiter le crédit-bail<input type="checkbox" id="s_cb"></label>
+        <label>Loyers annuels de crédit-bail (€)<input type="number" id="s_loy" value="40000" step="1000"></label>
+      </fieldset>
+      <fieldset><legend>2. Multiple</legend>
+        <label>Multiple VE / EBITDA<input type="number" id="s_mult" value="6.3" step="0.1"></label>
+      </fieldset>
+      <fieldset><legend>3. Dette nette</legend>
+        <label>Trésorerie disponible (€)<input type="number" id="s_tre" value="820000" step="1000"></label>
+        <label>- Trésorerie à conserver (€)<input type="number" id="s_min" value="0" step="10000"></label>
+        <label>Emprunts et découverts (€)<input type="number" id="s_emp" value="600000" step="1000"></label>
+        <label>Comptes courants d'associés (€)<input type="number" id="s_cca" value="150000" step="1000"></label>
+        <label>Participation due à la clôture (€)<input type="number" id="s_pd" value="40000" step="1000"></label>
+        <label>Capital restant dû du crédit-bail (€)<input type="number" id="s_crd" value="110000" step="1000"></label>
+      </fieldset>
+    </div>
+    <div>
+      <div class="out" aria-live="polite">
+        <div class="row"><span>EBITDA économique</span><span id="o_ebitda"></span></div>
+        <div class="row"><span>Valeur d'entreprise</span><span id="o_ve"></span></div>
+        <div class="row"><span>Dette nette (négative = trésorerie nette)</span><span id="o_dn"></span></div>
+        <div class="row big"><span>Valeur des titres</span><span id="o_titres"></span></div>
+        <small id="o_note"></small>
+        <div class="sens">
+          <div>Multiple - 0,5<b id="o_s1"></b></div>
+          <div>Multiple retenu<b id="o_s2"></b></div>
+          <div>Multiple + 0,5<b id="o_s3"></b></div>
+        </div>
+      </div>
+      <div class="box key"><b class="t">À tester</b>Cochez « Retraiter le crédit-bail » : l'EBITDA augmente des loyers, mais le capital restant dû entre dans la dette nette. Selon les montants, la valeur des titres monte ou baisse. Puis passez le multiple de 6,3 à 5,6 : vous mesurez l'enjeu du choix des comparables. Enfin, saisissez 500 000 € de trésorerie à conserver (trois mois de charges fixes) : seule la trésorerie excédentaire s'ajoute au prix.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ RÉFLEXES -->
+<section id="reflexes">
+  <div class="kicker">Mémo</div>
+  <h2>Les réflexes du conseil</h2>
+  <ol class="check">
+    <li>Dater l'évaluation, et dater au même jour la dette nette et les capitaux propres.</li>
+    <li>Chercher d'abord une transaction récente sur les titres de la société : elle prime sur toute méthode.</li>
+    <li>Analyser l'entreprise et son marché avant de calculer quoi que ce soit.</li>
+    <li>Retraiter l'EBE ligne par ligne, avec une source pour chaque retraitement.</li>
+    <li>Appliquer un multiple d'EBITDA à un EBITDA économique, jamais à un EBE comptable.</li>
+    <li>Choisir des comparables de même secteur et de même taille, et citer la source.</li>
+    <li>Dérouler l'inventaire complet de la dette nette.</li>
+    <li>Traiter le crédit-bail de façon symétrique : loyers et dette, ou ni l'un ni l'autre.</li>
+    <li>Ne compter chaque risque qu'une fois : dans le résultat, dans le taux ou dans une décote.</li>
+    <li>Ramener chaque méthode à une valeur des titres avant la moyenne, et vérifier que le prix reste finançable (méthode des banquiers).</li>
+    <li>Vérifier le multiple implicite de la valeur finale, et noter chaque décision pour pouvoir l'expliquer.</li>
+  </ol>
+</section>
+
+<!-- ============================================================ GLOSSAIRE -->
+<section id="glossaire">
+  <div class="kicker">Glossaire</div>
+  <h2>Les mots de la valorisation</h2>
+  <dl class="glo">
+    <dt>Bêta</dt><dd>Mesure de la sensibilité d'un secteur aux mouvements du marché. Un bêta de 1 correspond à la moyenne ; au-dessus, le secteur est plus risqué.</dd>
+    <dt>BFR (besoin en fonds de roulement)</dt><dd>Argent immobilisé dans le cycle d'exploitation : stocks et créances clients, moins les dettes fournisseurs, fiscales et sociales.</dd>
+    <dt>Capitalisation</dt><dd>Méthode qui divise un bénéfice durable par le taux de rendement exigé pour obtenir une valeur.</dd>
+    <dt>Crédit-bail</dt><dd>Location d'un bien avec option d'achat. Le bien n'est pas au bilan, mais l'entreprise s'est engagée à payer les loyers.</dd>
+    <dt>DCF</dt><dd>Méthode des flux de trésorerie actualisés. Rarement utilisée pour les PME, surtout rencontrée dans les levées de fonds.</dd>
+    <dt>Dette senior</dt><dd>Emprunt bancaire principal qui finance une acquisition, remboursé en priorité sur les autres dettes.</dd>
+    <dt>Décote</dt><dd>Réduction de valeur pour un risque non pris en compte ailleurs : minorité, illiquidité, dépendance au dirigeant.</dd>
+    <dt>Dette nette</dt><dd>Dettes financières de toute échéance, moins la trésorerie disponible, plus les autres engagements de nature financière.</dd>
+    <dt>EBE (excédent brut d'exploitation)</dt><dd>Ce que dégage l'activité après salaires, achats et impôts d'exploitation, avant amortissements, frais financiers et impôt sur les sociétés.</dd>
+    <dt>EBITDA économique</dt><dd>EBE retraité, complété pour être comparable aux multiples de marché : participation déduite, autres produits et charges de gestion intégrés.</dd>
+    <dt>Earn-out (complément de prix)</dt><dd>Partie du prix payée plus tard, si l'entreprise atteint des objectifs fixés à la cession.</dd>
+    <dt>GAP (garantie d'actif et de passif)</dt><dd>Engagement du vendeur d'indemniser l'acquéreur si un passif antérieur à la cession apparaît.</dd>
+    <dt>Goodwill</dt><dd>Valeur des éléments immatériels (clientèle, savoir-faire, réputation) au-delà de la valeur des actifs.</dd>
+    <dt>Méthode des banquiers (capacité de remboursement)</dt><dd>Prix qu'un repreneur peut financer : 70 % de la CAF consacrés à une dette sur 7 ans, plus un apport de 30 %. C'est une valeur d'entreprise.</dd>
+    <dt>Multiple</dt><dd>Coefficient appliqué à un agrégat (EBITDA, EBIT, résultat) pour obtenir une valeur.</dd>
+    <dt>Trésorerie excédentaire</dt><dd>Trésorerie au-delà de ce que l'entreprise doit garder pour fonctionner (usage : trois mois de charges fixes). C'est elle qui s'ajoute au prix.</dd>
+    <dt>Prime de taille</dt><dd>Supplément de rendement exigé pour une petite entreprise, plus risquée qu'une grande.</dd>
+    <dt>Valeur d'entreprise (VE)</dt><dd>Valeur de l'activité, indépendamment de la façon dont elle est financée.</dd>
+    <dt>Valeur des titres</dt><dd>Valeur revenant aux actionnaires : valeur d'entreprise moins dette nette.</dd>
+    <dt>Valeur vénale</dt><dd>Prix qui résulterait du jeu normal de l'offre et de la demande, à une date donnée. Notion retenue par l'administration fiscale et le juge.</dd>
+  </dl>
+</section>
+
+</main>
+</div>
+
+<footer>
+  Support pédagogique d'Eurallia Finance Marseille, à visée générale. Les exemples sont fictifs ; ils ne constituent ni une évaluation ni un conseil. Sources : DGFiP, « L'évaluation des entreprises et des titres de sociétés », juin 2026 (impots.gouv.fr) ; CCEF, « Indicateurs de la valeur des entreprises : actualité du coût du capital des PME », hors-série n° 18, février 2026.
+</footer>
+
+<script>
+const QUIZ = {
+ q1:[
+  {q:"Une société vaut 2 M€ (valeur d'entreprise). Elle a 500 000 € d'emprunts et 300 000 € de trésorerie. Que vaut le capital ?",
+   o:["2 000 000 €","1 800 000 €","1 500 000 €","2 200 000 €"],a:1,
+   e:"Dette nette = 500 000 - 300 000 = 200 000 €. Valeur des titres = 2 000 000 - 200 000 = 1 800 000 €."},
+  {q:"Les titres ont été cédés il y a huit mois à un tiers indépendant, dans un contexte inchangé. Pour l'administration :",
+   o:["Ce prix sert de référence prioritaire","Il faut ignorer cette transaction","Seule la valeur patrimoniale compte"],a:0,
+   e:"Une transaction récente et comparable sur les titres de la même société prime sur toute méthode (guide DGFiP, p. 5 et 6)."}
+ ],
+ q2:[
+  {q:"Pourquoi calcule-t-on un EBE moyen sur plusieurs exercices ?",
+   o:["Pour lisser une année exceptionnelle","Parce que la loi l'impose","Pour augmenter la valeur"],a:0,
+   e:"Une seule année peut être atypique. La moyenne, souvent pondérée, donne un agrégat plus représentatif."},
+  {q:"EBE de 400 000 € (N-2), 450 000 € (N-1), 500 000 € (N), pondération 1-2-3. Moyenne pondérée ?",
+   o:["450 000 €","466 667 €","500 000 €"],a:1,
+   e:"(400 000 + 2 × 450 000 + 3 × 500 000) / 6 = 2 800 000 / 6 = 466 667 €."}
+ ],
+ q3:[
+  {q:"Le dirigeant se rémunère 30 000 € ; un remplaçant coûterait 90 000 € chargés. Effet sur l'EBE retraité ?",
+   o:["+ 60 000 €","- 60 000 €","Aucun"],a:1,
+   e:"Un repreneur devra payer un dirigeant au prix du marché : l'EBE retraité baisse de 60 000 €."},
+  {q:"On retire 50 000 € de loyers de crédit-bail des charges. Que faut-il faire aussi ?",
+   o:["Rien","Ajouter le capital restant dû des contrats à la dette nette","Baisser le multiple"],a:1,
+   e:"Le retraitement doit être symétrique : l'EBITDA monte, et la dette correspondante entre dans la dette nette."},
+  {q:"La participation des salariés, versée chaque année :",
+   o:["Se déduit de l'EBITDA économique","S'ignore, car elle est sous l'exceptionnel","S'ajoute à l'EBITDA"],a:0,
+   e:"C'est une charge de personnel récurrente : elle se déduit. Le montant dû à la clôture va, lui, dans la dette nette."}
+ ],
+ q4:[
+  {q:"Un découvert bancaire de 80 000 € à la clôture :",
+   o:["Est une dette d'exploitation","Entre dans la dette nette","S'ignore car il est à court terme"],a:1,
+   e:"Toutes les dettes financières entrent dans la dette nette, quelle que soit leur échéance."},
+  {q:"Une entreprise a 1,2 M€ de charges fixes par an et 700 000 € de trésorerie. Quelle trésorerie excédentaire retient-on, selon l'usage des trois mois ?",
+   o:["700 000 €","400 000 €","100 000 €"],a:1,
+   e:"Trois mois de charges fixes : 1 200 000 / 4 = 300 000 € à conserver. Trésorerie excédentaire : 700 000 - 300 000 = 400 000 €. Les banques peuvent exiger davantage, par exemple une annuité de dette senior."},
+  {q:"La trésorerie est très élevée à la clôture parce que les clients paient tous en décembre :",
+   o:["On la prend telle quelle","On calcule un BFR normal et on corrige, preuves à l'appui","On l'exclut totalement"],a:1,
+   e:"Une trésorerie gonflée par la saisonnalité se corrige en normalisant le BFR ; c'est à celui qui s'en prévaut de le démontrer."}
+ ],
+ q5:[
+  {q:"Pour une PME de 1 M€ d'EBITDA, le multiple moyen d'EBITDA publié par la CCEF en 2026 est d'environ :",
+   o:["5,6x","8,4x","12x"],a:0,
+   e:"5,6x en moyenne tous secteurs pour 1 M€ d'EBITDA ; 8,4x pour 100 M€. La taille fait monter le multiple."},
+  {q:"On applique un multiple d'EBITDA issu de comparables à l'EBE comptable d'une PME. Problème ?",
+   o:["Aucun, c'est la même chose","Oui, les deux agrégats ne sont pas définis de la même façon","Oui, il faudrait un multiple de chiffre d'affaires"],a:1,
+   e:"L'administration le rappelle : un multiple d'EBITDA ne s'applique pas à un EBE comptable (guide DGFiP, p. 30)."}
+ ],
+ q6:[
+  {q:"Un bénéfice durable de 200 000 € et un taux exigé de 12,5 %, sans croissance. Valeur ?",
+   o:["1 600 000 €","2 500 000 €","250 000 €"],a:0,
+   e:"200 000 / 0,125 = 1 600 000 €."},
+  {q:"Si le taux exigé augmente, la valeur :",
+   o:["Augmente","Baisse","Ne change pas"],a:1,
+   e:"Un risque plus élevé fait exiger un rendement plus fort, donc payer moins cher le même bénéfice."},
+  {q:"La méthode DCF est surtout utilisée :",
+   o:["Pour toutes les TPE","Dans les levées de fonds et pour des entreprises de taille significative","Pour les SCI"],a:1,
+   e:"Elle suppose un plan d'affaires fiable ; elle est rare pour les PME et fréquente dans les levées de fonds."}
+ ],
+ q6b:[
+  {q:"Une PME dégage une CAF de 300 000 €. Avec la règle des banquiers (70 % sur 7 ans à 5 %, apport de 30 %), le prix finançable est d'environ :",
+   o:["1,7 M€","2,1 M€","3,0 M€"],a:0,
+   e:"Annuité : 210 000 €. Emprunt : 210 000 × 5,786 = 1 215 000 €. Prix : 1 215 000 / 0,70 = 1 736 000 €, soit environ 1,7 M€."},
+  {q:"Le prix finançable est de 2 M€. La société a 400 000 € d'emprunts et 650 000 € de trésorerie excédentaire. Valeur des titres ?",
+   o:["2 000 000 €","2 250 000 €","1 600 000 €"],a:1,
+   e:"La méthode des banquiers donne une valeur d'entreprise : on ajoute la trésorerie nette (650 000 - 400 000 = 250 000 €), soit 2 250 000 €."},
+  {q:"La méthode des banquiers donne-t-elle une valeur d'entreprise ou une valeur des titres ?",
+   o:["Une valeur d'entreprise : on la corrige de la dette nette","Une valeur des titres : on ne touche plus à rien"],a:0,
+   e:"Le banquier finance la reprise d'une activité supposée sans dette financière : on passe aux titres par la dette nette, comme pour un multiple."}
+ ],
+ q7:[
+  {q:"Avec l'actif net réévalué, faut-il retrancher la dette nette ?",
+   o:["Oui, toujours","Non, elle est déjà dans le bilan","Seulement la trésorerie"],a:1,
+   e:"L'actif net réévalué donne directement la valeur des titres : les dettes sont déjà déduites."},
+  {q:"Pour quelle société l'approche patrimoniale est-elle la plus pertinente ?",
+   o:["Une agence de conseil","Une SCI qui détient des immeubles","Une start-up logicielle"],a:1,
+   e:"La valeur d'une SCI tient surtout à ses actifs ; celle d'une société de services tient à sa rentabilité."}
+ ],
+ q9:[
+  {q:"Le multiple retenu est déjà bas « en raison de la petite taille et de la dépendance à deux clients ». Peut-on ajouter une décote pour ces mêmes raisons ?",
+   o:["Oui, c'est plus prudent","Non, ce serait compter deux fois les mêmes risques"],a:1,
+   e:"Un risque déjà intégré au multiple ou au taux ne justifie plus de décote (guide DGFiP, p. 52)."},
+  {q:"Un dirigeant de 68 ans, sans successeur, porte seul la relation avec les clients. Quelle décote est la plus défendable ?",
+   o:["Une décote homme-clé motivée par des faits","Une décote de taille","Aucune décote n'est jamais admise"],a:0,
+   e:"La décote homme-clé est reconnue par la jurisprudence quand la dépendance est prouvée et non déjà intégrée ailleurs."},
+  {q:"Un engagement de conservation Dutreil justifie-t-il une décote d'incessibilité ?",
+   o:["Oui, les titres sont bloqués","Non, le guide le dit sans effet sur la valeur vénale"],a:1,
+   e:"Le guide précise que les engagements Dutreil et les clauses d'inaliénabilité d'une donation sont sans effet sur la valeur (p. 55)."}
+ ],
+ q8:[
+  {q:"Le taux exigé comprend déjà une prime de taille. Ajoute-t-on une décote d'illiquidité ?",
+   o:["Oui, toujours 20 %","Non, ce serait compter deux fois le même risque","Oui, si le client le demande"],a:1,
+   e:"La prime de taille couvre déjà la moindre liquidité : la décote ferait double emploi (guide DGFiP, p. 20 et 54)."},
+  {q:"Pour une donation de titres, on présente à l'administration :",
+   o:["Une fourchette de valeurs","Une valeur unique, avec la méthode qui la justifie","Le prix souhaité par la famille"],a:1,
+   e:"L'impôt se calcule sur une valeur unique, issue d'une combinaison motivée (guide, p. 49)."}
+ ]
+};
+
+function renderQuiz(el){
+  const id=el.dataset.quiz, qs=QUIZ[id]; let answered=0, good=0;
+  const h=document.createElement("h4"); h.textContent="Quiz"; el.appendChild(h);
+  qs.forEach((it)=>{
+    const d=document.createElement("div"); d.className="q";
+    const p=document.createElement("p"); p.textContent=it.q; d.appendChild(p);
+    const fb=document.createElement("div"); fb.className="fb";
+    it.o.forEach((txt,j)=>{
+      const b=document.createElement("button"); b.className="opt"; b.type="button"; b.textContent=txt;
+      b.onclick=()=>{
+        if(d.dataset.done) return; d.dataset.done=1; answered++;
+        if(j===it.a){b.classList.add("good"); good++;} else {b.classList.add("bad"); d.querySelectorAll("button.opt")[it.a].classList.add("good");}
+        fb.textContent=(j===it.a?"Exact. ":"Pas tout à fait. ")+it.e; fb.style.display="block";
+        if(answered===qs.length){ sc.textContent="Score : "+good+" / "+qs.length; markDone(el.closest("section").id); }
+      };
+      d.appendChild(b);
+    });
+    d.appendChild(fb); el.appendChild(d);
+  });
+  const sc=document.createElement("div"); sc.className="score"; el.appendChild(sc);
+}
+const doneSet=new Set();
+function markDone(id){
+  doneSet.add(id);
+  try{localStorage.setItem("valo_done",JSON.stringify([...doneSet]));}catch(e){}
+  refreshNav();
+}
+function refreshNav(){
+  document.querySelectorAll("nav.side a").forEach(a=>{
+    const id=a.getAttribute("href").slice(1);
+    let s=a.querySelector(".done");
+    if(doneSet.has(id)&&!s){s=document.createElement("span");s.className="done";s.textContent="✓";a.appendChild(s);}
+  });
+  const n=document.querySelectorAll("[data-mod]").length;
+  document.getElementById("bar").style.width=Math.round(100*doneSet.size/n)+"%";
+}
+try{(JSON.parse(localStorage.getItem("valo_done")||"[]")).forEach(x=>doneSet.add(x));}catch(e){}
+document.querySelectorAll("[data-quiz]").forEach(renderQuiz);
+refreshNav();
+
+// navigation active
+const links=[...document.querySelectorAll("nav.side a")];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("active",l.getAttribute("href")==="#"+e.target.id));}})},{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("main section").forEach(s=>obs.observe(s));
+
+// mini calcul du module 6
+const fmt=n=>isFinite(n)?n.toLocaleString("fr-FR",{maximumFractionDigits:0})+" €":"n.c.";
+function mini(){
+  const k=parseFloat(document.getElementById("mk").value)/100, g=parseFloat(document.getElementById("mg").value)/100;
+  const o=document.getElementById("mo");
+  o.textContent=(k>g)?((1+g)/(k-g)).toLocaleString("fr-FR",{maximumFractionDigits:1}):"taux ≤ g : impossible";
+}
+["mk","mg"].forEach(i=>document.getElementById(i).addEventListener("input",mini)); mini();
+
+// méthode des banquiers
+function bank(){
+  const caf=parseFloat(document.getElementById("bk_caf").value)||0, part=(parseFloat(document.getElementById("bk_part").value)||0)/100;
+  const n=parseFloat(document.getElementById("bk_n").value)||0, t=(parseFloat(document.getElementById("bk_t").value)||0)/100, ap=(parseFloat(document.getElementById("bk_ap").value)||0)/100;
+  const a=caf*part, emp=t>0?a*(1-Math.pow(1+t,-n))/t:a*n, prix=ap<1?emp/(1-ap):NaN;
+  document.getElementById("bk_out").textContent=fmt(prix)+" (emprunt "+fmt(emp)+")";
+}
+["bk_caf","bk_part","bk_n","bk_t","bk_ap"].forEach(i=>document.getElementById(i).addEventListener("input",bank)); bank();
+
+// simulateur
+const v=id=>parseFloat(document.getElementById(id).value)||0;
+function sim(){
+  const cb=document.getElementById("s_cb").checked;
+  const ebitda=v("s_ebe")+v("s_ap")-v("s_ac")-v("s_part")-v("s_prov")+v("s_cir")+(cb?v("s_loy"):0);
+  const m=v("s_mult");
+  const dn=v("s_emp")+v("s_cca")+v("s_pd")+(cb?v("s_crd"):0)-(v("s_tre")-v("s_min"));
+  const ve=ebitda*m, t=ve-dn;
+  document.getElementById("o_ebitda").textContent=fmt(ebitda);
+  document.getElementById("o_ve").textContent=fmt(ve);
+  document.getElementById("o_dn").textContent=fmt(dn);
+  document.getElementById("o_titres").textContent=fmt(t);
+  document.getElementById("o_s1").textContent=fmt(ebitda*(m-0.5)-dn);
+  document.getElementById("o_s2").textContent=fmt(t);
+  document.getElementById("o_s3").textContent=fmt(ebitda*(m+0.5)-dn);
+  document.getElementById("o_note").textContent=cb?"Crédit-bail retraité : loyers ajoutés à l'EBITDA et capital restant dû ajouté à la dette nette.":"Crédit-bail non retraité : loyers laissés en charges, aucune dette ajoutée.";
+}
+document.querySelectorAll(".sim input").forEach(i=>i.addEventListener("input",sim)); sim();
+</script>
+</body>
+</html>
