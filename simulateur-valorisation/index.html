@@ -254,7 +254,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
     <tr><td>Autres produits et charges de gestion courante</td><td>Intégrés : ils font partie de l'activité, sauf les plus et moins-values de cession d'immobilisations, à neutraliser</td></tr>
     <tr><td>Participation des salariés</td><td>Déduite : c'est une charge de personnel qui reviendra chaque année</td></tr>
     <tr><td>Provisions courantes (clients douteux, litiges d'exploitation)</td><td>Déduites si elles se répètent d'une année sur l'autre</td></tr>
-    <tr><td>Crédits d'impôt (recherche, innovation)</td><td>Viennent réduire les charges qu'ils financent, s'ils sont récurrents</td></tr>
+    <tr><td>Crédits d'impôt (recherche, innovation)</td><td>Retenus seulement après une analyse au cas par cas : ils dépendent d'une règle fiscale qui peut changer à tout moment</td></tr>
     <tr><td>Loyers de crédit-bail</td><td>Au choix, mais de façon cohérente : voir l'encadré et le module 4</td></tr>
   </table>
   <div class="box key"><b class="t">Le crédit-bail : tout ou rien</b>Si l'on retire les loyers de crédit-bail des charges (l'EBITDA augmente), il faut ajouter à la dette nette ce qui reste à payer sur les contrats. Faire l'un sans l'autre surévalue l'entreprise. Le module 4 détaille ce choix.</div>
@@ -492,7 +492,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
     <tr><td>- Frais d'établissement (sans valeur)</td><td class="n">- 20 000</td></tr>
     <tr class="tot"><td>Actif net réévalué</td><td class="n">2 642 500</td></tr>
   </table>
-  <div class="box warn"><b class="t">Ne pas oublier l'impôt latent</b>Réévaluer un bien, c'est simuler sa vente. Si la société vendait le bâtiment, elle paierait un impôt sur la plus-value : c'est une dette certaine en cas de vente, qu'il faut retrancher. Cet impôt est souvent oublié.</div>
+  <div class="box cab"><b class="t">Dans la pratique du cabinet : l'impôt latent</b>Un bâtiment logé dans la société d'exploitation freine souvent la vente : l'immobilier se finance sur une quinzaine d'années, l'exploitation sur sept. La transmission passe donc le plus souvent par un montage juridique et financier qui sépare l'immobilier de l'exploitation et entraîne la cession du bien, donc l'impôt sur la plus-value. C'est pourquoi l'exemple retranche cet impôt, souvent oublié.</div>
   <div class="box fisc"><b class="t">Le regard de l'administration</b>L'administration distingue selon l'usage du bien. Un bien nécessaire à l'exploitation n'a pas vocation à être vendu : elle ne déduit pas d'impôt latent. Un bien qui n'est pas nécessaire à l'activité peut être cédé : l'impôt latent se déduit (guide DGFiP, p. 48 et 57).</div>
 
   <h3>Le fonds de commerce et le goodwill</h3>
@@ -518,9 +518,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
 
   <h3>Une valeur par méthode, puis une moyenne</h3>
   <p>Chaque méthode est d'abord ramenée à une valeur des titres : on ajoute la trésorerie nette aux méthodes qui donnent une valeur d'entreprise (multiples, CAF, capacité de remboursement), pas à celles qui donnent déjà une valeur des titres (patrimoniale, bénéfice net capitalisé). C'est seulement ensuite qu'on fait la moyenne, puis qu'on applique une éventuelle décote (module 11).</p>
-
-  <h3>Le contrôle final</h3>
-  <p>Une fois la valeur retenue, on la divise par l'EBITDA : le multiple obtenu doit rester dans l'ordre de grandeur du secteur. Si ce n'est pas le cas, il faut pouvoir l'expliquer (croissance, marge, dépendance).</p>
 
   <div class="quiz" data-quiz="q8"></div>
   <div class="next"><a href="#m7">← Module 9</a><a href="#m9">Module 11 →</a></div>
@@ -550,15 +547,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
 
   <div class="box warn"><b class="t">La règle d'or : un risque ne se compte qu'une fois</b>Si la taille et la dépendance aux clients ont servi à justifier un multiple bas ou un taux élevé, elles ne peuvent plus justifier une décote. Une décote de 30 % fondée sur quatre motifs qui se recoupent ne résiste pas à un contrôle ; une décote de 15 % fondée sur un seul risque bien démontré, si.</div>
 
-  <h3>Comment rédiger une décote défendable</h3>
-  <ol class="check">
-    <li>Nommer le risque précis que les méthodes n'intègrent pas.</li>
-    <li>Le prouver par des faits : âge du dirigeant, absence de successeur, poids du premier client, clauses des statuts.</li>
-    <li>Montrer qu'il n'est pas déjà dans le multiple, le taux ou la pondération.</li>
-    <li>Fixer un taux unique, en s'appuyant sur le guide et la jurisprudence.</li>
-    <li>Présenter la sensibilité de la valeur à ce taux (par exemple 10, 15 et 20 %).</li>
-  </ol>
-
   <div class="quiz" data-quiz="q9"></div>
   <div class="next"><a href="#m8">← Module 10</a><a href="#simulateur">Simulateur →</a></div>
 </section>
@@ -570,13 +558,15 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
   <p>Modifiez les montants : le calcul se fait instantanément, sans rien envoyer nulle part. Les valeurs proposées reprennent l'exemple fictif ALPHA.</p>
   <div class="sim">
     <div>
-      <fieldset><legend>1. EBITDA économique</legend>
-        <label>EBE retraité moyen (€)<input type="number" id="s_ebe" value="623000" step="1000"></label>
+      <fieldset><legend>1. De l'EBE comptable à l'EBITDA économique</legend>
+        <label>EBE comptable moyen (€)<input type="number" id="s_ebe" value="593000" step="1000"></label>
+        <label>± Rémunération du dirigeant (€)<input type="number" id="s_rem" value="40000" step="1000"></label>
+        <label>± Loyers (€)<input type="number" id="s_loyer" value="-10000" step="1000"></label>
+        <label>± Autres retraitements (€)<input type="number" id="s_autres" value="0" step="1000"></label>
         <label>+ Autres produits de gestion (€)<input type="number" id="s_ap" value="10000" step="1000"></label>
         <label>- Autres charges de gestion (€)<input type="number" id="s_ac" value="5000" step="1000"></label>
         <label>- Participation des salariés (€)<input type="number" id="s_part" value="35000" step="1000"></label>
         <label>- Provisions récurrentes (€)<input type="number" id="s_prov" value="0" step="1000"></label>
-        <label>+ Crédits d'impôt récurrents (€)<input type="number" id="s_cir" value="0" step="1000"></label>
         <label>Retraiter le crédit-bail<input type="checkbox" id="s_cb"></label>
         <label>Loyers annuels de crédit-bail (€)<input type="number" id="s_loy" value="40000" step="1000"></label>
       </fieldset>
@@ -593,6 +583,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
     </div>
     <div>
       <div class="out" aria-live="polite">
+        <div class="row"><span>EBE retraité</span><span id="o_eber"></span></div>
         <div class="row"><span>EBITDA économique</span><span id="o_ebitda"></span></div>
         <div class="row"><span>Valeur d'entreprise</span><span id="o_ve"></span></div>
         <div class="row"><span>Dette nette (négative = trésorerie nette)</span><span id="o_dn"></span></div>
@@ -604,7 +595,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
           <div>Multiple + 0,5<b id="o_s3"></b></div>
         </div>
       </div>
-      <div class="box key"><b class="t">À tester</b>Cochez « Retraiter le crédit-bail » : l'EBITDA augmente des loyers, mais le capital restant dû entre dans la dette nette. Selon les montants, la valeur des titres monte ou baisse. Puis passez le multiple de 5 à 4 : vous mesurez l'enjeu du choix des comparables. Enfin, baissez la trésorerie : chaque euro distribué avant la vente diminue d'autant la valeur des titres.</div>
+      <div class="box key"><b class="t">À tester</b>Saisissez les retraitements en positif s'ils augmentent l'EBE (rémunération du dirigeant trop élevée), en négatif s'ils le diminuent (loyer à porter au prix du marché). Cochez ensuite « Retraiter le crédit-bail » : l'EBITDA augmente des loyers, mais le capital restant dû entre dans la dette nette. Selon les montants, la valeur des titres monte ou baisse. Puis passez le multiple de 5 à 4 : vous mesurez l'enjeu du choix des comparables. Enfin, baissez la trésorerie : chaque euro distribué avant la vente diminue d'autant la valeur des titres.</div>
     </div>
   </div>
 </section>
@@ -624,7 +615,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:v
     <li>Traiter le crédit-bail de façon symétrique : loyers réintégrés et dette ajoutée, ou ni l'un ni l'autre.</li>
     <li>Ne compter chaque risque qu'une fois : dans le résultat, dans le taux ou dans une décote.</li>
     <li>Ramener chaque méthode à une valeur des titres avant la moyenne, et vérifier que le prix reste finançable (capacité de remboursement).</li>
-    <li>Vérifier le multiple implicite de la valeur finale, et noter chaque décision pour pouvoir l'expliquer.</li>
+    <li>Noter chaque décision pour pouvoir l'expliquer.</li>
   </ol>
 </section>
 
@@ -838,10 +829,12 @@ function bank(){
 const v=id=>parseFloat(document.getElementById(id).value)||0;
 function sim(){
   const cb=document.getElementById("s_cb").checked;
-  const ebitda=v("s_ebe")+v("s_ap")-v("s_ac")-v("s_part")-v("s_prov")+v("s_cir")+(cb?v("s_loy"):0);
+  const ebeR=v("s_ebe")+v("s_rem")+v("s_loyer")+v("s_autres");
+  const ebitda=ebeR+v("s_ap")-v("s_ac")-v("s_part")-v("s_prov")+(cb?v("s_loy"):0);
   const m=v("s_mult");
   const dn=v("s_emp")+v("s_cca")+v("s_pd")+(cb?v("s_crd"):0)-v("s_tre");
   const ve=ebitda*m, t=ve-dn;
+  document.getElementById("o_eber").textContent=fmt(ebeR);
   document.getElementById("o_ebitda").textContent=fmt(ebitda);
   document.getElementById("o_ve").textContent=fmt(ve);
   document.getElementById("o_dn").textContent=fmt(dn);
