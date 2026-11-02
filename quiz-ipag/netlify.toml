@@ -1,0 +1,7 @@
+# Projet Netlify « eurallia-quiz-ipag » : Base directory = quiz-ipag
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"

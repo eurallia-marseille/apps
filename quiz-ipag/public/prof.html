@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz reprise : écran enseignante</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --ink:#0F1C2C; --bronze:#9D8763; --sand:#F4F0E8; --line:#E2DACB; --ok:#2E7D32; --muted:#6B6B6B; --bg:#FFFFFF; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Arial, Helvetica, sans-serif; font-size:22px; line-height:1.35; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:14px 32px; border-bottom:4px solid var(--bronze); }
+  header img { height:56px; width:56px; }
+  header .t { font-size:20px; color:var(--muted); }
+  main { max-width:1200px; margin:0 auto; padding:24px 32px 120px; }
+  h1 { color:var(--bronze); font-size:44px; margin:10px 0 16px; }
+  .num { color:var(--bronze); font-weight:bold; font-size:22px; display:flex; justify-content:space-between; }
+  .q { font-size:34px; font-weight:bold; margin:10px 0 24px; }
+  .opt { display:flex; gap:18px; align-items:center; padding:16px 20px; margin-bottom:12px; border:3px solid var(--line); border-radius:14px; font-size:26px; position:relative; overflow:hidden; }
+  .opt b { color:var(--bronze); min-width:28px; z-index:1; }
+  .opt span { z-index:1; flex:1; }
+  .opt .bar { position:absolute; left:0; top:0; bottom:0; background:var(--sand); }
+  .opt .n { z-index:1; font-weight:bold; color:var(--muted); }
+  .opt.good { border-color:var(--ok); }
+  .opt.good .bar { background:#DDEEDD; }
+  .opt.good b, .opt.good .n { color:var(--ok); }
+  .expl { background:var(--sand); border-radius:14px; padding:18px 22px; margin-top:18px; font-size:23px; }
+  .src { color:var(--muted); font-style:italic; font-size:19px; }
+  .bar-cmd { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 32px; display:flex; gap:12px; justify-content:space-between; align-items:center; }
+  button { font:inherit; font-size:20px; cursor:pointer; padding:12px 24px; border-radius:10px; border:0; background:var(--ink); color:#fff; font-weight:bold; }
+  button.light { background:#fff; color:var(--muted); border:1px solid var(--line); font-weight:normal; font-size:16px; }
+  input { font:inherit; padding:12px; border:2px solid var(--line); border-radius:10px; width:280px; text-transform:uppercase; }
+  .names { color:var(--muted); font-size:20px; }
+  .count { font-size:72px; font-weight:bold; color:var(--bronze); }
+  .podium { display:flex; justify-content:center; align-items:flex-end; gap:24px; margin-top:40px; }
+  .step { width:260px; text-align:center; }
+  .step .who { font-size:32px; font-weight:bold; margin-bottom:8px; }
+  .step .pts { color:var(--muted); font-size:22px; margin-bottom:8px; }
+  .step .block { background:var(--bronze); color:#fff; font-size:56px; font-weight:bold; border-radius:12px 12px 0 0; display:flex; align-items:center; justify-content:center; }
+  .top3 { margin-top:18px; font-size:19px; color:var(--muted); }
+  .err { color:#B3261E; margin-top:10px; font-size:18px; }
+  .qr { display:flex; gap:32px; align-items:center; }
+  .qr img { width:240px; height:240px; }
+</style>
+</head>
+<body>
+<header>
+  <img src="logo-irce.png" alt="IRCE">
+  <div class="t">IPAG · Reprise d'entreprise · Bloc 2 · Quiz final</div>
+  <img src="logo-eurallia.png" alt="Eurallia Finance Marseille">
+</header>
+<main id="app"></main>
+<div class="bar-cmd" id="cmd" hidden></div>
+<script>
+const app = document.getElementById("app"), cmd = document.getElementById("cmd");
+const L = "ABCD";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+let code = "";
+try { code = sessionStorage.getItem("quiz-ipag-code") || ""; } catch (e) {}
+let timer = null, busy = false, last = "";
+
+async function admin(action) {
+  const r = await fetch("/api/admin", { method:"POST", headers:{ "content-type":"application/json" }, body:JSON.stringify({ code, action }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || "Erreur réseau");
+  return j;
+}
+
+function login(err) {
+  cmd.hidden = true;
+  app.innerHTML = `<h1>Écran enseignante</h1><p>Entrez le code pour piloter le quiz.</p>
+    <input id="code" type="password" autocomplete="off"> <button id="go">Ouvrir</button><div class="err">${err ? esc(err) : ""}</div>`;
+  const inp = document.getElementById("code");
+  const go = async () => {
+    code = inp.value.trim().toUpperCase();
+    try { const v = await admin("status"); try { sessionStorage.setItem("quiz-ipag-code", code); } catch (e) {} render(v); loop(); }
+    catch (e) { login(e.message); }
+  };
+  document.getElementById("go").onclick = go;
+  inp.onkeydown = e => { if (e.key === "Enter") go(); };
+  inp.focus();
+}
+
+async function act(action) {
+  if (busy) return;
+  if (action === "reset" && !confirm("Effacer tous les participants et toutes les réponses, et revenir au début ?")) return;
+  busy = true;
+  try { last = ""; render(await admin(action)); } catch (e) { alert(e.message); }
+  busy = false;
+}
+
+function buttons(list) {
+  cmd.hidden = false;
+  cmd.innerHTML = `<button class="light" data-a="reset">Effacer les réponses</button><div>${list.map(([a, t]) => `<button data-a="${a}">${t}</button>`).join(" ")}</div>`;
+  cmd.querySelectorAll("button").forEach(b => b.onclick = () => act(b.dataset.a));
+}
+
+function podium(top) {
+  const order = [1, 0, 2], h = [200, 150, 110];
+  return `<div class="podium">${order.filter(i => top[i]).map(i => `<div class="step"><div class="who">${esc(top[i].name)}</div>
+    <div class="pts">${top[i].score} point${top[i].score > 1 ? "s" : ""}</div><div class="block" style="height:${h[i]}px">${i + 1}</div></div>`).join("")}</div>`;
+}
+
+function render(v) {
+  const s = v.state;
+  const key = JSON.stringify([s, v.players, v.answered, v.counts]);
+  if (key === last) return;
+  last = key;
+  if (s.phase === "lobby") {
+    app.innerHTML = `<h1>Quiz final</h1><div class="qr"><img src="qr.png" alt="QR code du quiz"><div>
+      <p>Scannez le QR code ou ouvrez<br><b>${esc(location.host)}</b></p><p>Entrez votre prénom, puis attendez la première question.</p></div></div>
+      <p><span class="count">${v.players}</span> participant${v.players > 1 ? "s" : ""}</p><p class="names">${v.names.map(esc).join(" · ")}</p>`;
+    buttons([["start", "Lancer la première question"]]);
+    return;
+  }
+  if (s.phase === "end") {
+    app.innerHTML = `<h1>Podium</h1>${podium(v.top || [])}<p style="text-align:center;margin-top:40px">Chacun voit son score sur son téléphone et peut télécharger le quiz commenté.</p>`;
+    buttons([]);
+    return;
+  }
+  const Q = v.question, reveal = s.phase === "reveal";
+  const max = reveal ? Math.max(1, ...v.counts) : 1;
+  const opts = Q.options.map((o, i) => `<div class="opt ${reveal && i === Q.answer ? "good" : ""}">
+      ${reveal ? `<div class="bar" style="width:${(100 * v.counts[i] / max) * 0.98}%"></div>` : ""}
+      <b>${L[i]}</b><span>${esc(o)}</span>${reveal ? `<span class="n">${v.counts[i]}</span>` : ""}</div>`).join("");
+  let foot = "";
+  if (reveal) {
+    foot = `<div class="expl"><b>Explication.</b> ${esc(Q.explanation)}${Q.source ? ` <span class="src">Source : ${esc(Q.source)}.</span>` : ""}</div>`;
+    if (v.top?.length) foot += `<div class="top3">Classement provisoire : ${v.top.map((t, i) => `${i + 1}. ${esc(t.name)} (${t.score})`).join(" · ")}</div>`;
+  }
+  app.innerHTML = `<div class="num"><span>Question ${s.q + 1} / ${v.total}</span><span>${v.answered} / ${v.players} réponse${v.answered > 1 ? "s" : ""}</span></div>
+    <div class="q">${esc(Q.q)}</div>${opts}${foot}`;
+  if (reveal) document.querySelector(".expl").scrollIntoView({ block: "end", behavior: "smooth" });
+  buttons(reveal ? [["next", s.q + 1 < v.total ? "Question suivante" : "Afficher le podium"]] : [["reveal", "Afficher la réponse"]]);
+}
+
+function loop() {
+  clearTimeout(timer);
+  timer = setTimeout(async () => {
+    try { if (!busy) render(await admin("status")); } catch (e) {}
+    loop();
+  }, 2000);
+}
+
+if (code) admin("status").then(v => { render(v); loop(); }).catch(() => login()); else login();
+</script>
+</body>
+</html>
