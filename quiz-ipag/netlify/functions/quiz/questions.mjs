@@ -202,7 +202,7 @@ export const QUESTIONS = [
     "source": null
   },
   {
-    "q": "Un earn-out (complément de prix) est :",
+    "q": "Un earn-out est :",
     "options": [
       "Une partie du prix payée selon les résultats futurs de l'entreprise",
       "Un complément de salaire pour un homme clé",
