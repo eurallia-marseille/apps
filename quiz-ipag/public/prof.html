@@ -29,6 +29,7 @@
   .bar-cmd { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 32px; display:flex; gap:12px; justify-content:space-between; align-items:center; }
   button { font:inherit; font-size:20px; cursor:pointer; padding:12px 24px; border-radius:10px; border:0; background:var(--ink); color:#fff; font-weight:bold; }
   button.light { background:#fff; color:var(--muted); border:1px solid var(--line); font-weight:normal; font-size:16px; }
+  button.light.armed { background:#B3261E; color:#fff; border-color:#B3261E; font-weight:bold; }
   input { font:inherit; padding:12px; border:2px solid var(--line); border-radius:10px; width:280px; text-transform:uppercase; }
   .names { color:var(--muted); font-size:20px; }
   .count { font-size:72px; font-weight:bold; color:var(--bronze); }
@@ -94,7 +95,6 @@ function login(err) {
 
 async function act(action) {
   if (busy) return;
-  if (action === "reset" && !confirm("Effacer tous les participants et toutes les réponses, et revenir au début ?")) return;
   busy = true;
   try { last = ""; render(await admin(action)); } catch (e) { alert(e.message); }
   busy = false;
@@ -103,7 +103,16 @@ async function act(action) {
 function buttons(list) {
   cmd.hidden = false;
   cmd.innerHTML = `<button class="light" data-a="reset">Effacer les réponses</button><div>${list.map(([a, t]) => `<button data-a="${a}">${t}</button>`).join(" ")}</div>`;
-  cmd.querySelectorAll("button").forEach(b => b.onclick = () => act(b.dataset.a));
+  cmd.querySelectorAll("button:not(.light)").forEach(b => b.onclick = () => act(b.dataset.a));
+  // effacement en deux appuis : certains navigateurs mobiles bloquent confirm() sans rien afficher
+  const reset = cmd.querySelector("button.light");
+  let armed = null;
+  reset.onclick = () => {
+    if (armed) { clearTimeout(armed); armed = null; act("reset"); return; }
+    reset.textContent = "Confirmer l'effacement";
+    reset.classList.add("armed");
+    armed = setTimeout(() => { armed = null; reset.textContent = "Effacer les réponses"; reset.classList.remove("armed"); }, 5000);
+  };
 }
 
 function podium(top) {
