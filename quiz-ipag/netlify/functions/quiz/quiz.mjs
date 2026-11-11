@@ -24,8 +24,9 @@ async function sha256(text) {
 // question as students see it: no answer, no explanation
 const publicQuestion = (i) => ({ q: QUESTIONS[i].q, options: QUESTIONS[i].options });
 
-const score = (p) =>
-  Object.entries(p.answers || {}).reduce((s, [q, a]) => s + (QUESTIONS[q] && a.c === QUESTIONS[q].answer ? 1 : 0), 0);
+// v:2 = réponse donnée après le changement d'ordre des options ; sinon ancien ordre (legacy)
+const good = (q, a) => QUESTIONS[q] && a.c === (a.v === 2 || QUESTIONS[q].legacy === undefined ? QUESTIONS[q].answer : QUESTIONS[q].legacy);
+const score = (p) => Object.entries(p.answers || {}).reduce((s, [q, a]) => s + (good(q, a) ? 1 : 0), 0);
 
 const time = (p) => Object.values(p.answers || {}).reduce((s, a) => s + (a.ms || 0), 0);
 
@@ -35,11 +36,21 @@ async function players(store) {
   return all.filter(Boolean);
 }
 
-// ranking: score, then total answer time (faster first)
-const ranking = (list) =>
+// podium : les ex aequo partagent la même marche ; marche 1 = meilleur score, 2 = score suivant, 3 = le suivant
+// (dans une marche, les plus rapides sont cités en premier)
+const podium = (list) => {
+  const steps = [];
   list
     .map((p) => ({ name: p.name, score: score(p), time: time(p) }))
-    .sort((a, b) => b.score - a.score || a.time - b.time);
+    .filter((p) => p.score > 0)
+    .sort((a, b) => b.score - a.score || a.time - b.time)
+    .forEach((p) => {
+      const last = steps[steps.length - 1];
+      if (last && last.score === p.score) last.names.push(p.name);
+      else if (steps.length < 3) steps.push({ rank: steps.length + 1, score: p.score, names: [p.name] });
+    });
+  return steps;
+};
 
 async function readState(store) {
   return (await store.get("state", { type: "json" })) || LOBBY;
@@ -59,7 +70,7 @@ async function teacherView(store, state) {
     view.answered = answered;
     if (state.phase === "reveal") view.counts = counts;
   }
-  if (state.phase === "reveal" || state.phase === "end") view.top = ranking(list).filter((p) => p.score > 0).slice(0, 3);
+  if (state.phase === "reveal" || state.phase === "end") view.podium = podium(list);
   return view;
 }
 
@@ -103,7 +114,7 @@ export async function handle(req, store) {
     const me = await store.get(`p/${id}`, { type: "json" });
     if (!me) return json({ error: "Entrez d'abord votre prénom." }, 400);
     if (me.answers?.[q]) return json({ ok: true, c: me.answers[q].c }); // une seule réponse par question
-    me.answers = { ...(me.answers || {}), [q]: { c, ms: Math.max(0, Date.now() - (state.openedAt || Date.now())) } };
+    me.answers = { ...(me.answers || {}), [q]: { c, v: 2, ms: Math.max(0, Date.now() - (state.openedAt || Date.now())) } };
     await store.setJSON(`p/${id}`, me);
     return json({ ok: true, c });
   }

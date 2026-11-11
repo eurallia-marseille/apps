@@ -35,7 +35,8 @@
   .count { font-size:72px; font-weight:bold; color:var(--bronze); }
   .podium { display:flex; justify-content:center; align-items:flex-end; gap:24px; margin-top:40px; }
   .step { width:260px; text-align:center; }
-  .step .who { font-size:32px; font-weight:bold; margin-bottom:8px; }
+  .step .who { font-size:32px; font-weight:bold; margin-bottom:8px; line-height:1.15; overflow-wrap:anywhere; }
+  .step .who.many { font-size:22px; }
   .step .pts { color:var(--muted); font-size:22px; margin-bottom:8px; }
   .step .block { background:var(--bronze); color:#fff; font-size:56px; font-weight:bold; border-radius:12px 12px 0 0; display:flex; align-items:center; justify-content:center; }
   .top3 { margin-top:18px; font-size:19px; color:var(--muted); }
@@ -51,7 +52,7 @@
     .bar-cmd { padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
     button { font-size:16px; padding:12px 16px; } button.light { font-size:13px; padding:10px 12px; }
     .qr { flex-direction:column; align-items:flex-start; } .qr img { width:180px; height:180px; }
-    .podium { gap:10px; } .step { width:110px; } .step .who { font-size:20px; } .step .block { font-size:36px; }
+    .podium { gap:10px; } .step { width:110px; } .step .who { font-size:18px; } .step .who.many { font-size:14px; } .step .block { font-size:36px; }
   }
 </style>
 </head>
@@ -115,10 +116,11 @@ function buttons(list) {
   };
 }
 
-function podium(top) {
+// steps : [{ rank, score, names }] ; les ex aequo partagent la même marche
+function podium(steps) {
   const order = [1, 0, 2], h = [200, 150, 110];
-  return `<div class="podium">${order.filter(i => top[i]).map(i => `<div class="step"><div class="who">${esc(top[i].name)}</div>
-    <div class="pts">${top[i].score} point${top[i].score > 1 ? "s" : ""}</div><div class="block" style="height:${h[i]}px">${i + 1}</div></div>`).join("")}</div>`;
+  return `<div class="podium">${order.filter(i => steps[i]).map(i => `<div class="step"><div class="who${steps[i].names.length > 3 ? " many" : ""}">${steps[i].names.map(esc).join("<br>")}</div>
+    <div class="pts">${steps[i].score} point${steps[i].score > 1 ? "s" : ""}</div><div class="block" style="height:${h[i]}px">${i + 1}</div></div>`).join("")}</div>`;
 }
 
 // confettis à l'affichage du podium, une seule fois par fin de quiz
@@ -162,7 +164,7 @@ function render(v) {
     return;
   }
   if (s.phase === "end") {
-    app.innerHTML = `<h1>Podium</h1>${podium(v.top || [])}<p style="text-align:center;margin-top:40px">Chacun voit son score sur son téléphone et peut télécharger le quiz commenté.</p>`;
+    app.innerHTML = `<h1>Podium</h1>${podium(v.podium || [])}<p style="text-align:center;margin-top:40px">Chacun voit son score sur son téléphone et peut télécharger le quiz commenté.</p>`;
     buttons([]);
     if (!celebrated) { celebrated = true; confetti(); }
     return;
@@ -175,7 +177,7 @@ function render(v) {
   let foot = "";
   if (reveal) {
     foot = `<div class="expl"><b>Explication.</b> ${esc(Q.explanation)}${Q.source ? ` <span class="src">Source : ${esc(Q.source)}.</span>` : ""}</div>`;
-    if (v.top?.length) foot += `<div class="top3">Classement provisoire : ${v.top.map((t, i) => `${i + 1}. ${esc(t.name)} (${t.score})`).join(" · ")}</div>`;
+    if (v.podium?.length) foot += `<div class="top3">Classement provisoire : ${v.podium.map(t => `${t.rank}. ${t.names.map(esc).join(", ")} (${t.score})`).join(" · ")}</div>`;
   }
   app.innerHTML = `<div class="num"><span>Question ${s.q + 1} / ${v.total}</span><span>${v.answered} / ${v.players} réponse${v.answered > 1 ? "s" : ""}</span></div>
     <div class="q">${esc(Q.q)}</div>${opts}${foot}`;
