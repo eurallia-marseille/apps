@@ -6,6 +6,7 @@ Pages et mini-applications publiées sur Netlify. Un dossier par application ; c
 |---|---|---|
 | `simulateur-valorisation` | Support de formation à la valorisation d'entreprise (10 modules, quiz, simulateur) | https://eurallia-simulateur-valorisation.netlify.app |
 | `quiz-ipag` | Quiz final du cours IPAG Bloc 2 (reprise d'entreprise) : écran élève, écran enseignante `/prof.html`, podium ; fonction Netlify et Netlify Blobs, Base directory = `quiz-ipag` | https://eurallia-quiz-ipag.netlify.app |
+| `ajustement-bfr` | Fiche pédagogique cédant sur l'ajustement du prix de cession selon le BFR (explications, simulateur, aide à la rédaction de la clause) | https://ajustement-bfr-eurallia.netlify.app |
 
 Règles :
 
